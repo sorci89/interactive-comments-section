@@ -6,8 +6,10 @@ const auth =
     console.log("doing authentication");
     const token = req.header("authorization");
 
-    jwt.verify(token, process.env.JWT_SECRET, (error) => {
+    jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
       if (error && block) return res.sendStatus(401);
+
+      res.locals.user = user;
       next();
     });
   };
