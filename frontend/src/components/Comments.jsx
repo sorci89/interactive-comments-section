@@ -90,9 +90,9 @@ const Comments = ({token}) => {
     } 
   }
 
-  const deleteComment = async(id)=> {
+  const deleteElement = async(id, type)=> {
     try {
-      const resp = await axios.put("http://localhost:4000/api/comments/deletecomment", {
+      const resp = await axios.put(`http://localhost:4000/api/comments/delete${type}`, {
         id
       }, {
         headers: {
@@ -148,7 +148,7 @@ const Comments = ({token}) => {
               <a href="nolink">{comment.user.username}</a>
               {comment.user._id === currentUser._id && <span>you</span>}
               <span>{comment.createdAt}</span>
-              {comment.user._id === currentUser._id ? <><button onClick={()=> deleteComment(comment._id)}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}>Edit</button></> : <button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}>Reply</button>}
+              {comment.user._id === currentUser._id ? <><button onClick={()=> deleteElement(comment._id, "comment")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}>Edit</button></> : <button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}>Reply</button>}
               <section>{comment.content}</section>
               {activeElement === comment._id && <div>
                 <img src={currentUser.profile_picture} alt="" />
@@ -158,7 +158,7 @@ const Comments = ({token}) => {
                 </div>}
             </div>
           </div>
-          <Reply comment={comment} currentUser={currentUser} token={token} getComments={getComments} sendNewReply={sendNewReply} setIsOpen={setIsOpen} setActive={setActiveElement} active={activeElement} isOpen={isOpen} setNewReply={setNewContent} newReply={newContent} addReplyDetails={addReplyDetails}/>
+          <Reply comment={comment} currentUser={currentUser} token={token} getComments={getComments} sendNewReply={sendNewReply} setIsOpen={setIsOpen} setActiveElement={setActiveElement} activeElement={activeElement} isOpen={isOpen} setNewContent={setNewContent} newContent={newContent} addReplyDetails={addReplyDetails} deleteElement={deleteElement}/>
         </li>)}
         </ul>
       <div>

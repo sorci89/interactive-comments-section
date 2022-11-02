@@ -1,13 +1,11 @@
 import axios from "axios";
-import { useState } from "react";
 
-const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActive, active, setNewReply, newReply, addReplyDetails, isOpen, setIsOpen}) => {
+const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiveElement, activeElement, setNewContent, newContent, addReplyDetails, isOpen, setIsOpen, deleteElement}) => {
 
-    const [isEditing, setIsEditing] = useState(false)
 
     const sendReplyScore = async({reply}, score) => {
         try {
-          const resp = await axios.put("http://localhost:4000/api/comments/editreply", {
+          const resp = await axios.put("http://localhost:4000/api/comments/editreplyscore", {
             replyId: reply._id,
             score: Number(reply.score) + Number(score),
           }, {
@@ -21,35 +19,18 @@ const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiv
           return error.resp
         } 
       }
-
-      const deleteReply = async(id)=> {
-        try {
-          const resp = await axios.put("http://localhost:4000/api/comments/deletereply", {
-            id
-          }, {
-            headers: {
-              'Authorization': token
-            }
-          })
-          console.log(resp)
-          getComments()
-        } catch(error) {
-          console.log(error);
-          return error.resp
-        } 
-      }
     
       const updateReply = async (replyId, replyingTo) => {
         let replyContent;
 
-        if (newReply.search(`@${replyingTo},`) === 0) {
-            replyContent = newReply.slice(replyingTo.length + 2)
+        if (newContent.search(`@${replyingTo},`) === 0) {
+            replyContent = newContent.slice(replyingTo.length + 2)
         } else {
-            replyContent = newReply
+            replyContent = newContent
         }
 
         try {
-            const resp = await axios.put("http://localhost:4000/api/comments/editreply", {
+            const resp = await axios.put("http://localhost:4000/api/comments/editreplycontent", {
               replyId,
               content: replyContent,
             }, {
@@ -58,8 +39,7 @@ const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiv
               }
             });
             getComments();
-            setIsEditing(false)
-            setActive()
+            setActiveElement()
           } catch(error) {
             console.log(error);
             return error.resp
@@ -82,11 +62,11 @@ return (
               <a href="nolink">{reply.user.username}</a>
               {reply.user._id === currentUser._id && <span>you</span>}
               <span>{reply.createdAt}</span>
-              {reply.user._id === currentUser._id ? <><button onClick={()=> deleteReply(reply._id)}>Delete</button><button onClick={() => {setIsOpen("editor"); setActive(reply._id); addReplyDetails(reply.replyingTo, reply.content)}} disabled={active === reply._id} >Edit</button></> : <button onClick={()=> {setIsOpen("reply"); setActive(reply._id); addReplyDetails(reply.user.username)}} disabled={active === reply._id}>Reply</button>}
+              {reply.user._id === currentUser._id ? <><button onClick={()=> deleteElement(reply._id, "reply")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(reply._id); addReplyDetails(reply.replyingTo, reply.content)}} disabled={activeElement === reply._id} >Edit</button></> : <button onClick={()=> {setIsOpen("reply"); setActiveElement(reply._id); addReplyDetails(reply.user.username)}} disabled={activeElement === reply._id}>Reply</button>}
               <section><a href="nolink">@{reply.replyingTo}</a>{reply.content}</section>
-              {active === reply._id && <div>
+              {activeElement === reply._id && <div>
                 <img src={currentUser.profile_picture} alt="" />
-                <input type="text" value={newReply} onChange={(event)=>setNewReply(event.target.value)}></input>
+                <input type="text" value={newContent} onChange={(event)=>setNewContent(event.target.value)}></input>
                 {isOpen === "editor" && <button onClick={()=>updateReply(reply._id, reply.replyingTo)}>Update</button>} 
                 {isOpen === "reply" && <button onClick={()=>sendNewReply(comment._id, reply.user.username)}>Reply</button>}
                 </div>}

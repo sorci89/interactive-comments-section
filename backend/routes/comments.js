@@ -45,8 +45,6 @@ router.put("/editcommentcontent", auth({ block: true }), async (req, res) => {
   const user = res.locals.user;
 
   const comment = await Comment.findById({ _id: req.body.commentId });
-  console.log(user._id);
-  console.log(comment.user._id);
 
   if (user._id != comment.user._id) return res.sendStatus(403);
 
@@ -91,17 +89,31 @@ router.post("/addreply", auth({ block: true }), async (req, res) => {
   return res.status(200).json("Reply has been added");
 });
 
-//EDIT REPLY
-router.put("/editreply", auth({ block: true }), async (req, res) => {
+//EDIT REPLY SCORE
+router.put("/editreplyscore", auth({ block: true }), async (req, res) => {
+  const user = res.locals.user;
+
+  const reply = await Reply.findById({ _id: req.body.replyId });
+
+  if (user._id == reply.user._id) return res.sendStatus(403);
+
+  await reply.updateOne({
+    score: req.body.score,
+  });
+
+  return res.status(200).json("Reply score has been edited");
+});
+
+//EDIT REPLY CONTENT
+router.put("/editreplycontent", auth({ block: true }), async (req, res) => {
   await Reply.findByIdAndUpdate(
     { _id: req.body.replyId },
     {
       content: req.body.content,
-      score: req.body.score,
     }
   );
 
-  return res.status(200).json("Reply has been edited");
+  return res.status(200).json("Reply content has been edited");
 });
 
 // DELETE REPLY
