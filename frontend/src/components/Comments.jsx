@@ -8,6 +8,7 @@ const Comments = ({token}) => {
   const [newContent, setNewContent] = useState("")
   const [activeElement, setActiveElement] = useState()
   const [isOpen, setIsOpen] = useState("")
+  const [scored, setScored] = useState("")
   
   const currentUser = jwt(token)
     
@@ -137,9 +138,9 @@ const Comments = ({token}) => {
         {comments.map(comment => <li key={comment._id}>
           <div>
             <div>
-              <button onClick={()=> sendScore(comment, +1, "comment")} disabled={currentUser._id === comment.user._id}>+</button>
+              <button onClick={()=> {sendScore(comment, +1, "comment"); setScored("plus"); setActiveElement(comment._id)}} disabled={currentUser._id === comment.user._id || (activeElement === comment._id && scored === "plus")}>+</button>
               <span>{comment.score}</span>
-              <button onClick={()=> sendScore(comment, -1, "comment")} disabled={currentUser._id === comment.user._id}>-</button>
+              <button onClick={()=> {sendScore(comment, -1, "comment"); setScored("minus"); setActiveElement(comment._id)}} disabled={currentUser._id === comment.user._id || (activeElement === comment._id && scored === "minus")}>-</button>
             </div>
             <div>
               <div>
