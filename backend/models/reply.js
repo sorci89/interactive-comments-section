@@ -6,6 +6,7 @@ const replySchema = new mongoose.Schema(
     score: { type: String },
     comment: { type: mongoose.SchemaTypes.ObjectId, ref: "comments" },
     user: { type: mongoose.SchemaTypes.ObjectId, ref: "User" },
+    replyingTo: { type: String },
   },
   { timestamps: true }
 );

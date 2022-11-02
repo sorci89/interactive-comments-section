@@ -38,7 +38,6 @@ router.post("/login", async (req, res) => {
   );
   if (!passwordIsValid) return res.status(401).json("User Not found.");
 
-  console.log(user.image.png);
   const token = jwt.sign(
     { _id: user._id, png: user.image.png },
     process.env.JWT_SECRET,

@@ -1,13 +1,13 @@
 import axios from "axios";
 import jwt from "jwt-decode"
 import { useState, useEffect } from "react";
+import Reply from './Reply'
 
 const Comments = ({token}) => {
   const [comments, setComments] = useState([])
-  const [newComment, setNewComment] = useState("")
-  const [newReply, setNewReply] = useState("")
-  const [isReplyOpen, setIsReplyOpen] = useState(false)
-  const [active, setActive] = useState()
+  const [newContent, setNewContent] = useState("")
+  const [activeElement, setActiveElement] = useState()
+  const [isOpen, setIsOpen] = useState("")
   
   const currentUser = jwt(token)
     
@@ -25,11 +25,17 @@ const Comments = ({token}) => {
       return error.resp
     }
   }
+
+  const addReplyDetails = (replyingTo, replyContent)=> {
+    let replyDetails = replyContent ? `@${replyingTo},${replyContent}` : `@${replyingTo},`
+    
+    setNewContent(replyDetails)
+ }
   
   const sendNewComment = async() => {
     try {
       const resp = await axios.post("http://localhost:4000/api/comments/addcomment", {
-        content: newComment,
+        content: newContent,
         score: '0',
       }, {
         headers: {
@@ -46,7 +52,7 @@ const Comments = ({token}) => {
 
   const sendScore = async({comment}, score) => {
     try {
-      const resp = await axios.put("http://localhost:4000/api/comments/editcomment", {
+      const resp = await axios.put("http://localhost:4000/api/comments/editcommentscore", {
         commentId: comment._id,
         score: Number(comment.score) + Number(score),
       }, {
@@ -62,15 +68,18 @@ const Comments = ({token}) => {
     } 
   }
 
-  const sendNewReply = async(commentId) => {
+  const sendNewReply = async(commentId, replyingTo) => {
+    let replyContent = newContent.search(`@${replyingTo},`) === 0 ? newContent.slice(replyingTo.length + 2) : newContent
+
     try {
       const resp = await axios.post("http://localhost:4000/api/comments/addreply", {
-        content: newReply,
+        content: replyContent,
         score: "0",
-        commentId
+        commentId,
+        replyingTo
       }, {
-        headers: {
-          'Authorization': token
+       headers: {
+        'Authorization': token
         }
       });
       console.log(resp)
@@ -81,8 +90,41 @@ const Comments = ({token}) => {
     } 
   }
 
+  const deleteComment = async(id)=> {
+    try {
+      const resp = await axios.put("http://localhost:4000/api/comments/deletecomment", {
+        id
+      }, {
+        headers: {
+          'Authorization': token
+        }
+      })
+      console.log(resp)
+      getComments()
+    } catch(error) {
+      console.log(error);
+      return error.resp
+    } 
+  }
+
+  const updateComment = async(commentId)=> {
+    try {
+      const resp = await axios.put("http://localhost:4000/api/comments/editcommentcontent", {
+        commentId,
+        content: newContent
+      }, {
+        headers: {
+          'Authorization': token
+        }
+      })
+      console.log(resp)
+      getComments()
+    } catch(error) {
+      console.log(error);
+      return error.resp
+    } 
+  }
   
- 
   useEffect(() => {
     getComments()
      // eslint-disable-next-line
@@ -104,24 +146,25 @@ const Comments = ({token}) => {
                 <img src={comment.user.image.png} alt="Profile" />
               </div>
               <a href="nolink">{comment.user.username}</a>
+              {comment.user._id === currentUser._id && <span>you</span>}
               <span>{comment.createdAt}</span>
-              <button onClick={()=> {setIsReplyOpen(true); setActive(comment._id)}} disabled={active === comment._id && isReplyOpen}>Reply</button>
-              {active === comment._id && isReplyOpen && <div>
-                <img src={currentUser.profile_picture} alt="" />
-                <input type="text" placeholder="Reply" onChange={(event)=>setNewReply(event.target.value)}/>
-                <button onClick={()=>sendNewReply(comment._id)}>Reply</button></div>}
+              {comment.user._id === currentUser._id ? <><button onClick={()=> deleteComment(comment._id)}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}>Edit</button></> : <button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}>Reply</button>}
               <section>{comment.content}</section>
+              {activeElement === comment._id && <div>
+                <img src={currentUser.profile_picture} alt="" />
+                <input type="text" value={newContent} onChange={(event)=>setNewContent(event.target.value)}></input>
+                {isOpen === "editor" && <button onClick={()=>updateComment(comment._id)}>Update</button>} 
+                {isOpen === "reply" && <button onClick={()=>sendNewReply(comment._id, comment.user.username)}>Reply</button>}
+                </div>}
             </div>
           </div>
-          <div>
-            {comment.replies.map(reply => <div>{reply.content}</div>)}
-          </div>
+          <Reply comment={comment} currentUser={currentUser} token={token} getComments={getComments} sendNewReply={sendNewReply} setIsOpen={setIsOpen} setActive={setActiveElement} active={activeElement} isOpen={isOpen} setNewReply={setNewContent} newReply={newContent} addReplyDetails={addReplyDetails}/>
         </li>)}
         </ul>
       <div>
         <div>
-          <img src={currentUser.profile_picture} alt="" />
-          <input type="text" placeholder="Add a comment" onChange={(event)=>setNewComment(event.target.value)}/>
+          <img src={currentUser.png} alt="" />
+          <input type="text" placeholder="Add a comment" onChange={(event)=>setNewContent(event.target.value)}/>
           <button onClick={()=>sendNewComment()}>Send</button>
         </div>
       </div>
