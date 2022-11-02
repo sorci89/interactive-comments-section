@@ -9,7 +9,6 @@ const Comments = ({token}) => {
   const [newContent, setNewContent] = useState("")
   const [activeElement, setActiveElement] = useState()
   const [isOpen, setIsOpen] = useState("")
-  const [scored, setScored] = useState("")
   
   const currentUser = jwt(token)
     
@@ -51,24 +50,6 @@ const Comments = ({token}) => {
       return error.resp
     }
   }
-
-  // const sendScore = async(element, score, type) => {
-  //   try {
-  //     const resp = await axios.put(`http://localhost:4000/api/comments/edit${type}score`, {
-  //       id: element._id,
-  //       score: Number(element.score) + Number(score),
-  //     }, {
-  //       headers: {
-  //         'Authorization': token
-  //       }
-  //     });
-  //     console.log(resp)
-  //     getComments()
-  //   } catch(error) {
-  //     console.log(error);
-  //     return error.resp
-  //   } 
-  // }
 
   const sendNewReply = async(commentId, replyingTo) => {
     let replyContent = newContent.search(`@${replyingTo},`) === 0 ? newContent.slice(replyingTo.length + 2) : newContent
