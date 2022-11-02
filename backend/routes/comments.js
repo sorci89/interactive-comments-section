@@ -32,7 +32,7 @@ router.put("/editcommentscore", auth({ block: true }), async (req, res) => {
 
   const comment = await Comment.findById({ _id: req.body.id });
 
-  if (user._id === comment.user._id) return res.sendStatus(403);
+  if (user._id == comment.user._id) return res.sendStatus(403);
 
   await comment.updateOne({
     score: req.body.score,
@@ -95,6 +95,7 @@ router.put("/editreplyscore", auth({ block: true }), async (req, res) => {
 
   const reply = await Reply.findById({ _id: req.body.id });
 
+  console.log(reply);
   if (user._id == reply.user._id) return res.sendStatus(403);
 
   await reply.updateOne({

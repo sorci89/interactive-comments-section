@@ -1,4 +1,5 @@
 import axios from "axios";
+import Score from "./Score";
 
 const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiveElement, activeElement, setNewContent, newContent, addReplyDetails, isOpen, setIsOpen, deleteElement, sendScore}) => {
 
@@ -26,11 +27,7 @@ return (
 <>
 <ul>
             {comment.replies.map(reply => <li key={reply._id}>
-              <div>
-              <button onClick={()=> sendScore(reply, +1, "reply")} disabled={currentUser._id === reply.user._id}>+</button>
-              <span>{reply.score}</span>
-              <button onClick={()=> sendScore(reply, -1, "reply")} disabled={currentUser._id === reply.user._id}>-</button>
-            </div>
+                <Score currentUser={currentUser} element={reply} token={token} getComments={getComments} type={"reply"}/>
             <div>
               <div>
                 <img src={reply.user.image.png} alt="Profile" />

@@ -2,6 +2,7 @@ import axios from "axios";
 import jwt from "jwt-decode"
 import { useState, useEffect } from "react";
 import Reply from './Reply'
+import Score from "./Score";
 
 const Comments = ({token}) => {
   const [comments, setComments] = useState([])
@@ -51,23 +52,23 @@ const Comments = ({token}) => {
     }
   }
 
-  const sendScore = async(element, score, type) => {
-    try {
-      const resp = await axios.put(`http://localhost:4000/api/comments/edit${type}score`, {
-        id: element._id,
-        score: Number(element.score) + Number(score),
-      }, {
-        headers: {
-          'Authorization': token
-        }
-      });
-      console.log(resp)
-      getComments()
-    } catch(error) {
-      console.log(error);
-      return error.resp
-    } 
-  }
+  // const sendScore = async(element, score, type) => {
+  //   try {
+  //     const resp = await axios.put(`http://localhost:4000/api/comments/edit${type}score`, {
+  //       id: element._id,
+  //       score: Number(element.score) + Number(score),
+  //     }, {
+  //       headers: {
+  //         'Authorization': token
+  //       }
+  //     });
+  //     console.log(resp)
+  //     getComments()
+  //   } catch(error) {
+  //     console.log(error);
+  //     return error.resp
+  //   } 
+  // }
 
   const sendNewReply = async(commentId, replyingTo) => {
     let replyContent = newContent.search(`@${replyingTo},`) === 0 ? newContent.slice(replyingTo.length + 2) : newContent
@@ -137,11 +138,7 @@ const Comments = ({token}) => {
         <ul>
         {comments.map(comment => <li key={comment._id}>
           <div>
-            <div>
-              <button onClick={()=> {sendScore(comment, +1, "comment"); setScored("plus"); setActiveElement(comment._id)}} disabled={currentUser._id === comment.user._id || (activeElement === comment._id && scored === "plus")}>+</button>
-              <span>{comment.score}</span>
-              <button onClick={()=> {sendScore(comment, -1, "comment"); setScored("minus"); setActiveElement(comment._id)}} disabled={currentUser._id === comment.user._id || (activeElement === comment._id && scored === "minus")}>-</button>
-            </div>
+            <Score element={comment} currentUser={currentUser} token={token} getComments={getComments} type={"comment"}/>
             <div>
               <div>
                 <img src={comment.user.image.png} alt="Profile" />
@@ -159,7 +156,7 @@ const Comments = ({token}) => {
                 </div>}
             </div>
           </div>
-          <Reply comment={comment} currentUser={currentUser} token={token} getComments={getComments} sendNewReply={sendNewReply} setIsOpen={setIsOpen} setActiveElement={setActiveElement} activeElement={activeElement} isOpen={isOpen} setNewContent={setNewContent} newContent={newContent} addReplyDetails={addReplyDetails} deleteElement={deleteElement} sendScore={sendScore}/>
+          <Reply comment={comment} currentUser={currentUser} token={token} getComments={getComments} sendNewReply={sendNewReply} setIsOpen={setIsOpen} setActiveElement={setActiveElement} activeElement={activeElement} isOpen={isOpen} setNewContent={setNewContent} newContent={newContent} addReplyDetails={addReplyDetails} deleteElement={deleteElement} />
         </li>)}
         </ul>
       <div>
