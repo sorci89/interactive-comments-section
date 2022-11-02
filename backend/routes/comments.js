@@ -30,7 +30,7 @@ router.post("/addcomment", auth({ block: true }), async (req, res) => {
 router.put("/editcommentscore", auth({ block: true }), async (req, res) => {
   const user = res.locals.user;
 
-  const comment = await Comment.findById({ _id: req.body.commentId });
+  const comment = await Comment.findById({ _id: req.body.id });
 
   if (user._id === comment.user._id) return res.sendStatus(403);
 
@@ -93,7 +93,7 @@ router.post("/addreply", auth({ block: true }), async (req, res) => {
 router.put("/editreplyscore", auth({ block: true }), async (req, res) => {
   const user = res.locals.user;
 
-  const reply = await Reply.findById({ _id: req.body.replyId });
+  const reply = await Reply.findById({ _id: req.body.id });
 
   if (user._id == reply.user._id) return res.sendStatus(403);
 

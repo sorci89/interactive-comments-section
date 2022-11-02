@@ -1,33 +1,9 @@
 import axios from "axios";
 
-const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiveElement, activeElement, setNewContent, newContent, addReplyDetails, isOpen, setIsOpen, deleteElement}) => {
+const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiveElement, activeElement, setNewContent, newContent, addReplyDetails, isOpen, setIsOpen, deleteElement, sendScore}) => {
 
-
-    const sendReplyScore = async({reply}, score) => {
-        try {
-          const resp = await axios.put("http://localhost:4000/api/comments/editreplyscore", {
-            replyId: reply._id,
-            score: Number(reply.score) + Number(score),
-          }, {
-            headers: {
-              'Authorization': token
-            }
-          });
-          getComments()
-        } catch(error) {
-          console.log(error);
-          return error.resp
-        } 
-      }
-    
-      const updateReply = async (replyId, replyingTo) => {
-        let replyContent;
-
-        if (newContent.search(`@${replyingTo},`) === 0) {
-            replyContent = newContent.slice(replyingTo.length + 2)
-        } else {
-            replyContent = newContent
-        }
+    const updateReply = async (replyId, replyingTo) => {
+        let replyContent = newContent.search(`@${replyingTo},`) === 0 ? newContent.slice(replyingTo.length + 2) : newContent
 
         try {
             const resp = await axios.put("http://localhost:4000/api/comments/editreplycontent", {
@@ -51,9 +27,9 @@ return (
 <ul>
             {comment.replies.map(reply => <li key={reply._id}>
               <div>
-              <button onClick={()=> sendReplyScore({reply}, +1)} disabled={currentUser._id === reply.user._id}>+</button>
+              <button onClick={()=> sendScore(reply, +1, "reply")} disabled={currentUser._id === reply.user._id}>+</button>
               <span>{reply.score}</span>
-              <button onClick={()=> sendReplyScore({reply}, -1)} disabled={currentUser._id === reply.user._id}>-</button>
+              <button onClick={()=> sendScore(reply, -1, "reply")} disabled={currentUser._id === reply.user._id}>-</button>
             </div>
             <div>
               <div>

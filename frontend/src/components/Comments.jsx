@@ -50,11 +50,11 @@ const Comments = ({token}) => {
     }
   }
 
-  const sendScore = async({comment}, score) => {
+  const sendScore = async(element, score, type) => {
     try {
-      const resp = await axios.put("http://localhost:4000/api/comments/editcommentscore", {
-        commentId: comment._id,
-        score: Number(comment.score) + Number(score),
+      const resp = await axios.put(`http://localhost:4000/api/comments/edit${type}score`, {
+        id: element._id,
+        score: Number(element.score) + Number(score),
       }, {
         headers: {
           'Authorization': token
@@ -137,9 +137,9 @@ const Comments = ({token}) => {
         {comments.map(comment => <li key={comment._id}>
           <div>
             <div>
-              <button onClick={()=> sendScore({comment}, +1)} disabled={currentUser._id === comment.user._id}>+</button>
+              <button onClick={()=> sendScore(comment, +1, "comment")} disabled={currentUser._id === comment.user._id}>+</button>
               <span>{comment.score}</span>
-              <button onClick={()=> sendScore({comment}, -1)} disabled={currentUser._id === comment.user._id}>-</button>
+              <button onClick={()=> sendScore(comment, -1, "comment")} disabled={currentUser._id === comment.user._id}>-</button>
             </div>
             <div>
               <div>
@@ -158,7 +158,7 @@ const Comments = ({token}) => {
                 </div>}
             </div>
           </div>
-          <Reply comment={comment} currentUser={currentUser} token={token} getComments={getComments} sendNewReply={sendNewReply} setIsOpen={setIsOpen} setActiveElement={setActiveElement} activeElement={activeElement} isOpen={isOpen} setNewContent={setNewContent} newContent={newContent} addReplyDetails={addReplyDetails} deleteElement={deleteElement}/>
+          <Reply comment={comment} currentUser={currentUser} token={token} getComments={getComments} sendNewReply={sendNewReply} setIsOpen={setIsOpen} setActiveElement={setActiveElement} activeElement={activeElement} isOpen={isOpen} setNewContent={setNewContent} newContent={newContent} addReplyDetails={addReplyDetails} deleteElement={deleteElement} sendScore={sendScore}/>
         </li>)}
         </ul>
       <div>
