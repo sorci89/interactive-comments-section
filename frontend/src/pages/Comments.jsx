@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Reply from '../components/Reply'
 import Score from "../components/Score";
+import CreatedAt from "../components/CreatedAt";
 
 const Comments = ({token, currentUser}) => {
   const [comments, setComments] = useState([])
@@ -110,9 +111,9 @@ const Comments = ({token, currentUser}) => {
      // eslint-disable-next-line
   }, [])
 
-
+  
   return (
-  <>
+    <>
     {token ? <div>
      <ul>
         {comments.map(comment => <li key={comment._id}>
@@ -124,7 +125,7 @@ const Comments = ({token, currentUser}) => {
               </div>
               <a href="nolink">{comment.user.username}</a>
               {comment.user._id === currentUser._id && <span>you</span>}
-              <span>{comment.createdAt}</span>
+              <CreatedAt creationDate={comment.createdAt} />
               {comment.user._id === currentUser._id ? <><button onClick={()=> deleteElement(comment._id, "comment")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}>Edit</button></> : <button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}>Reply</button>}
               <section>{comment.content}</section>
               {activeElement === comment._id && <div>

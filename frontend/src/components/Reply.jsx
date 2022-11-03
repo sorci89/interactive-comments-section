@@ -1,5 +1,6 @@
 import axios from "axios";
 import Score from "./Score";
+import CreatedAt from "./CreatedAt";
 
 const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiveElement, activeElement, setNewContent, newContent, addReplyDetails, isOpen, setIsOpen, deleteElement, sendScore}) => {
 
@@ -34,7 +35,7 @@ return (
               </div>
               <a href="nolink">{reply.user.username}</a>
               {reply.user._id === currentUser._id && <span>you</span>}
-              <span>{reply.createdAt}</span>
+              <CreatedAt creationDate={reply.createdAt}/>
               {reply.user._id === currentUser._id ? <><button onClick={()=> deleteElement(reply._id, "reply")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(reply._id); addReplyDetails(reply.replyingTo, reply.content)}} disabled={activeElement === reply._id} >Edit</button></> : <button onClick={()=> {setIsOpen("reply"); setActiveElement(reply._id); addReplyDetails(reply.user.username)}} disabled={activeElement === reply._id}>Reply</button>}
               <section><a href="nolink">@{reply.replyingTo}</a>{reply.content}</section>
               {activeElement === reply._id && <div>
