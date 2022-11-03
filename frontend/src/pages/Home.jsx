@@ -1,13 +1,9 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Home = ({token}) => {
+const Home = () => {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (token) navigate("/comments")
-  },)
   
   return (
     <div>

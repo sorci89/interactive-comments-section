@@ -1,17 +1,14 @@
 import axios from "axios";
-import jwt from "jwt-decode"
 import { useState, useEffect } from "react";
-import Reply from './Reply'
-import Score from "./Score";
+import Reply from '../components/Reply'
+import Score from "../components/Score";
 
-const Comments = ({token}) => {
+const Comments = ({token, currentUser}) => {
   const [comments, setComments] = useState([])
   const [newContent, setNewContent] = useState("")
   const [activeElement, setActiveElement] = useState()
   const [isOpen, setIsOpen] = useState("")
-  
-  const currentUser = jwt(token)
-    
+
   const getComments = async() => {
     try {
       const resp = await axios.get("http://localhost:4000/api/comments", {
@@ -107,7 +104,7 @@ const Comments = ({token}) => {
       return error.resp
     } 
   }
-  
+
   useEffect(() => {
     getComments()
      // eslint-disable-next-line
@@ -115,8 +112,9 @@ const Comments = ({token}) => {
 
 
   return (
-    <div>
-        <ul>
+  <>
+    {token ? <div>
+     <ul>
         {comments.map(comment => <li key={comment._id}>
           <div>
             <Score element={comment} currentUser={currentUser} token={token} getComments={getComments} type={"comment"}/>
@@ -147,7 +145,8 @@ const Comments = ({token}) => {
           <button onClick={()=>sendNewComment()}>Send</button>
         </div>
       </div>
-    </div>
+    </div> : <div>Please Signup or login</div>}
+  </>
   )
 }
   

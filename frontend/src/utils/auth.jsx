@@ -48,7 +48,7 @@ const AuthProvider = ({children}) => {
     const contextValue = {token, logout, login, user, signup};
 
     useEffect(() => {
-        const tokenInStorage = localStorage.getItem("token")
+        const tokenInStorage = sessionStorage.getItem("token")
         if (tokenInStorage) {
             setToken(tokenInStorage)
             setUser(jwt(tokenInStorage))
