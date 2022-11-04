@@ -1,4 +1,4 @@
-import "./App.css";
+import styles from "./app.module.css";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -11,7 +11,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
   return (
-    <div className="App">
+    <div className={styles.container}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
