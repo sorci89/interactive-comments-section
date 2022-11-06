@@ -62,5 +62,5 @@ body {
   color: var(--grayish-blue);
   font-family: Rubik, sans-serif;
   font-size: var(--base-font-size);
-  background-color: var(--very-light-grayish-blue);
+  background-color: var(--light-gray);
 }

@@ -1,6 +1,7 @@
 import axios from "axios";
 import Score from "./Score";
 import CreatedAt from "./CreatedAt";
+import styles from "./reply.module.css";
 
 const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiveElement, activeElement, setNewContent, newContent, addReplyDetails, isOpen, setIsOpen, deleteElement, sendScore}) => {
 
@@ -25,14 +26,14 @@ const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiv
       }
 
 return (
-<>
-<ul>
-            {comment.replies.map(reply => <li key={reply._id}>
-                <Score currentUser={currentUser} element={reply} token={token} getComments={getComments} type={"reply"}/>
-            <div>
-              <div>
-                <img src={reply.user.image.png} alt="Profile" />
-              </div>
+  <>
+  <ul className={styles['reply-card']}>
+    {comment.replies.map(reply => <li key={reply._id}>
+      <Score currentUser={currentUser} element={reply} token={token} getComments={getComments} type={"reply"}/>
+      <div>
+        <div>
+          <img src={reply.user.image.png} alt="Profile" />
+        </div>
               <a href="nolink">{reply.user.username}</a>
               {reply.user._id === currentUser._id && <span>you</span>}
               <CreatedAt creationDate={reply.createdAt}/>
@@ -44,11 +45,11 @@ return (
                 {isOpen === "editor" && <button onClick={()=>updateReply(reply._id, reply.replyingTo)}>Update</button>} 
                 {isOpen === "reply" && <button onClick={()=>sendNewReply(comment._id, reply.user.username)}>Reply</button>}
                 </div>}
-            </div> 
-            </li>)}
-          </ul>
-</>
-)
+      </div> 
+    </li>)}
+  </ul>
+  </>
+  )
 }
 
 export default Reply

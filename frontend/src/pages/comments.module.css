@@ -1,0 +1,94 @@
+.comment-card {
+  padding: 20px;
+  max-width: 700px;
+  border-radius: 10px;
+  background-color: var(--white);
+}
+
+.button-reply-editor button {
+  font-size: var(--base-font-size);
+  font-weight: var(--medium-font-weight);
+  color: var(--moderate-blue);
+}
+
+.button-reply-editor button:hover {
+  color: var(--light-grayish-blue);
+}
+
+.button-reply-editor {
+  margin-left: auto;
+}
+
+.comment-card-top-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-content-section {
+  margin-bottom: 15px;
+}
+
+@media screen and (max-width: 750px) {
+  .comment-card {
+    margin: 15px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto auto;
+  }
+
+  .button-reply-editor {
+    grid-column-start: 2;
+    grid-row-start: 3;
+  }
+
+  .card-content-section {
+    grid-row-start: 2;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+
+  .comment-card-top-section {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 1;
+  }
+}
+
+@media screen and (min-width: 751px) {
+  .comment-card {
+    margin: 15px auto;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+  }
+
+  .button-reply-editor {
+    grid-column-start: 3;
+    grid-row-start: 1;
+  }
+
+  .card-content-section {
+    grid-row-start: 2;
+    grid-column-start: 2;
+    grid-column-end: 4;
+  }
+}
+
+.picture-container {
+  margin-right: 15px;
+  width: 35px;
+}
+
+.profile-picture {
+  width: 100%;
+  height: auto;
+}
+
+.profile-name-link {
+  margin-right: 15px;
+  color: var(--dark-blue);
+  font-weight: var(--medium-font-weight);
+}
