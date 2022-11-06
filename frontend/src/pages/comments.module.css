@@ -1,21 +1,32 @@
-.comment-card {
+.comment-card,
+.reply-editor,
+.new-comment-container {
   padding: 20px;
   max-width: 700px;
   border-radius: 10px;
   background-color: var(--white);
 }
 
-.button-reply-editor button {
+.reply-editor,
+.new-comment-container {
+  display: flex;
+}
+
+.open-editor-button button {
   font-size: var(--base-font-size);
   font-weight: var(--medium-font-weight);
   color: var(--moderate-blue);
 }
 
-.button-reply-editor button:hover {
+.open-editor-button button:hover {
   color: var(--light-grayish-blue);
 }
 
-.button-reply-editor {
+.open-editor-button button:disabled {
+  color: var(--light-grayish-blue);
+}
+
+.open-editor-button {
   margin-left: auto;
 }
 
@@ -29,6 +40,35 @@
   margin-bottom: 15px;
 }
 
+.editor-profile-picture-container {
+  flex-shrink: 0;
+  margin-right: 15px;
+  width: 40px;
+  height: auto;
+}
+
+.editor-profile-picture {
+  width: 100%;
+  height: auto;
+}
+
+.editor-button {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 95px;
+  height: 45px;
+  border-radius: 10px;
+  background-color: var(--moderate-blue);
+  text-transform: uppercase;
+  font-size: var(--base-font-size);
+  font-weight: var(--medium-font-weight);
+  color: var(--white);
+}
+
+.editor-button:hover {
+  background-color: var(--light-grayish-blue);
+}
+
 @media screen and (max-width: 750px) {
   .comment-card {
     margin: 15px;
@@ -37,7 +77,12 @@
     grid-template-rows: auto auto auto;
   }
 
-  .button-reply-editor {
+  .reply-editor,
+  .new-comment-container {
+    margin: 15px;
+  }
+
+  .open-editor-button {
     grid-column-start: 2;
     grid-row-start: 3;
   }
@@ -55,6 +100,12 @@
     grid-row-start: 1;
     grid-row-end: 1;
   }
+
+  .editor-button {
+    width: 75px;
+    height: 35px;
+    font-size: 14px;
+  }
 }
 
 @media screen and (min-width: 751px) {
@@ -65,7 +116,12 @@
     grid-template-rows: auto auto auto;
   }
 
-  .button-reply-editor {
+  .reply-editor,
+  .new-comment-container {
+    margin: 15px auto;
+  }
+
+  .open-editor-button {
     grid-column-start: 3;
     grid-row-start: 1;
   }
@@ -91,4 +147,20 @@
   margin-right: 15px;
   color: var(--dark-blue);
   font-weight: var(--medium-font-weight);
+}
+
+.editor-text {
+  margin-right: 15px;
+  padding: 10px 20px;
+  width: 100%;
+  height: 75px;
+  border: 1px solid var(--light-grayish-blue);
+  border-radius: 10px;
+  font-size: var(--base-font-size);
+  cursor: pointer;
+}
+
+.editor-text:hover,
+.editor-text:focus {
+  border: 1px solid var(--moderate-blue);
 }

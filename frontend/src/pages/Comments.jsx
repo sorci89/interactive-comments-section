@@ -128,24 +128,28 @@ const Comments = ({token, currentUser}) => {
                 {comment.user._id === currentUser._id && <span>you</span>}
                 <CreatedAt creationDate={comment.createdAt} />
               </div>
-              {comment.user._id === currentUser._id ? <div className={styles["button-reply-editor"]}><button onClick={()=> deleteElement(comment._id, "comment")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}>Edit</button></div> : <div className={styles["button-reply-editor"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}>Reply</button></div>}
+              {comment.user._id === currentUser._id ? <div className={styles["open-editor-button"]}><button onClick={()=> deleteElement(comment._id, "comment")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}>Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}>Reply</button></div>}
               <div className={styles["card-content-section"]}>
                 <section>{comment.content}</section>
               </div>
           </div>
           {activeElement === comment._id && <div className={styles["reply-editor"]}>
-            <img src={currentUser.profile_picture} alt="" />
-            <input type="text" value={newContent} onChange={(event)=>setNewContent(event.target.value)}></input>
-            {isOpen === "editor" && <button onClick={()=>updateComment(comment._id)}>Update</button>} 
-            {isOpen === "reply" && <button onClick={()=>sendNewReply(comment._id, comment.user.username)}>Reply</button>}
+            <div className={styles['editor-profile-picture-container']}>
+              <img className={styles['editor-profile-picture']} src={currentUser.png} alt="" />
+            </div>
+            <textarea className={styles["editor-text"]} type="text" value={newContent} onChange={(event)=>setNewContent(event.target.value)}></textarea>
+            {isOpen === "editor" && <button className={styles['editor-button']} onClick={()=>updateComment(comment._id)}>Update</button>} 
+            {isOpen === "reply" && <button className={styles['editor-button']} onClick={()=>sendNewReply(comment._id, comment.user.username)}>Reply</button>}
           </div>}
           <Reply comment={comment} currentUser={currentUser} token={token} getComments={getComments} sendNewReply={sendNewReply} setIsOpen={setIsOpen} setActiveElement={setActiveElement} activeElement={activeElement} isOpen={isOpen} setNewContent={setNewContent} newContent={newContent} addReplyDetails={addReplyDetails} deleteElement={deleteElement} />
         </li>)}
       </ul>
       <div className={styles['new-comment-container']}>
-        <img src={currentUser.png} alt="" />
-        <input type="text" placeholder="Add a comment" onChange={(event)=>setNewContent(event.target.value)}/>
-        <button onClick={()=>sendNewComment()}>Send</button>
+        <div className={styles['editor-profile-picture-container']}>
+          <img className={styles['editor-profile-picture']} src={currentUser.png} alt="" />
+        </div>
+        <textarea className={styles["editor-text"]} placeholder="Add a comment..." onChange={(event)=>setNewContent(event.target.value)}/>
+        <button className={styles['editor-button']} onClick={()=>sendNewComment()}>Send</button>
       </div>
     </div> : <div>Please Signup or login</div>}
   </>
