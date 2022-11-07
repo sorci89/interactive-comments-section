@@ -27,27 +27,40 @@ const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiv
 
 return (
   <>
-  <ul className={styles['reply-card']}>
-    {comment.replies.map(reply => <li key={reply._id}>
-      <Score currentUser={currentUser} element={reply} token={token} getComments={getComments} type={"reply"}/>
-      <div>
-        <div>
-          <img src={reply.user.image.png} alt="Profile" />
+  <div className={styles['reply-cards-container']}>
+    <ul>
+      {comment.replies.map(reply => <div className={styles['card-wrapper']}>
+        <div className={styles['reply-line']}>
         </div>
-              <a href="nolink">{reply.user.username}</a>
+        <li key={reply._id}>
+          <div className={styles['reply-card']}>
+            <Score currentUser={currentUser} element={reply} token={token} getComments={getComments} type={"reply"}/>
+            <div className={styles["reply-card-top-section"]}>
+              <div className={styles['picture-container']}>
+                <img className={styles['profile-picture']} src={reply.user.image.png} alt="Profile" />
+              </div>
+              <a className={styles["profile-name-link"]} href="nolink">{reply.user.username}</a>
               {reply.user._id === currentUser._id && <span>you</span>}
               <CreatedAt creationDate={reply.createdAt}/>
-              {reply.user._id === currentUser._id ? <><button onClick={()=> deleteElement(reply._id, "reply")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(reply._id); addReplyDetails(reply.replyingTo, reply.content)}} disabled={activeElement === reply._id} >Edit</button></> : <button onClick={()=> {setIsOpen("reply"); setActiveElement(reply._id); addReplyDetails(reply.user.username)}} disabled={activeElement === reply._id}>Reply</button>}
+            </div>
+            {reply.user._id === currentUser._id ? <div className={styles["open-editor-button"]}><button onClick={()=> deleteElement(reply._id, "reply")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(reply._id); addReplyDetails(reply.replyingTo, reply.content)}} disabled={activeElement === reply._id} >Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(reply._id); addReplyDetails(reply.user.username)}} disabled={activeElement === reply._id}>Reply</button></div>}
+            <div className={styles["card-content-section"]}>
               <section><a href="nolink">@{reply.replyingTo}</a>{reply.content}</section>
-              {activeElement === reply._id && <div>
-                <img src={currentUser.profile_picture} alt="" />
-                <input type="text" value={newContent} onChange={(event)=>setNewContent(event.target.value)}></input>
-                {isOpen === "editor" && <button onClick={()=>updateReply(reply._id, reply.replyingTo)}>Update</button>} 
-                {isOpen === "reply" && <button onClick={()=>sendNewReply(comment._id, reply.user.username)}>Reply</button>}
-                </div>}
-      </div> 
-    </li>)}
-  </ul>
+            </div>
+          </div>
+          {activeElement === reply._id && <div className={styles["reply-editor"]}>
+            <div className={styles['editor-profile-picture-container']}>
+              <img className={styles['editor-profile-picture']} src={currentUser.png} alt="" />
+            </div> 
+            <textarea className={styles["editor-text"]} value={newContent} onChange={(event)=>setNewContent(event.target.value)} />
+            {isOpen === "editor" && <button className={styles['editor-button']} onClick={()=>updateReply(reply._id, reply.replyingTo)}>Update</button>} 
+            {isOpen === "reply" && <button className={styles['editor-button']} onClick={()=>sendNewReply(comment._id, reply.user.username)}>Reply</button>}
+          </div>}
+        </li>
+    </div>
+    )}
+    </ul>
+  </div>
   </>
   )
 }

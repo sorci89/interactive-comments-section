@@ -1,3 +1,12 @@
+.comments-container {
+  padding: 25px 20px;
+}
+
+.comment-card,
+.reply-editor {
+  margin-bottom: 15px;
+}
+
 .comment-card,
 .reply-editor,
 .new-comment-container {
@@ -71,15 +80,9 @@
 
 @media screen and (max-width: 750px) {
   .comment-card {
-    margin: 15px;
     display: grid;
     grid-template-columns: auto auto;
     grid-template-rows: auto auto auto;
-  }
-
-  .reply-editor,
-  .new-comment-container {
-    margin: 15px;
   }
 
   .open-editor-button {
@@ -110,15 +113,18 @@
 
 @media screen and (min-width: 751px) {
   .comment-card {
-    margin: 15px auto;
+    margin: 0 auto 15px;
     display: grid;
     grid-template-columns: auto auto auto;
     grid-template-rows: auto auto auto;
   }
 
-  .reply-editor,
   .new-comment-container {
-    margin: 15px auto;
+    margin: 0 auto;
+  }
+
+  .reply-editor {
+    margin: 0 auto 15px;
   }
 
   .open-editor-button {
