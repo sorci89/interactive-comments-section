@@ -128,6 +128,16 @@ li {
   border: 1px solid var(--moderate-blue);
 }
 
+.currentuser-sign {
+  margin-right: 15px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background-color: var(--moderate-blue);
+  line-height: 16px;
+  font-size: 14px;
+  color: var(--white);
+}
+
 @media screen and (max-width: 750px) {
   .reply-line {
     margin-right: 20px;

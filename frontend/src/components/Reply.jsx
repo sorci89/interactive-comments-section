@@ -40,7 +40,7 @@ return (
                 <img className={styles['profile-picture']} src={reply.user.image.png} alt="Profile" />
               </div>
               <a className={styles["profile-name-link"]} href="nolink">{reply.user.username}</a>
-              {reply.user._id === currentUser._id && <span>you</span>}
+              {reply.user._id === currentUser._id && <span className={styles["currentuser-sign"]}>you</span>}
               <CreatedAt creationDate={reply.createdAt}/>
             </div>
             {reply.user._id === currentUser._id ? <div className={styles["open-editor-buttongroup"]}><button onClick={()=> deleteElement(reply._id, "reply")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(reply._id); addReplyDetails(reply.replyingTo, reply.content)}} disabled={activeElement === reply._id} >Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(reply._id); addReplyDetails(reply.user.username)}} disabled={activeElement === reply._id}>Reply</button></div>}
