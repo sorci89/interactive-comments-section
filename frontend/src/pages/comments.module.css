@@ -94,6 +94,10 @@ li {
   background-color: var(--light-grayish-blue);
 }
 
+.open-editor-buttongroup button:first-child {
+  color: var(--soft-red);
+}
+
 @media screen and (max-width: 750px) {
   .comment-card {
     display: grid;
