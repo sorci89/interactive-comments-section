@@ -1,6 +1,7 @@
 import { useState} from "react"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import styles from './signup.module.css'
 
 
 const Signup = () => {
@@ -21,9 +22,9 @@ const Signup = () => {
   };
 
     return (
-      <div>
-       <h1>Sign up</h1>
+      <div className={styles['signup-container']}>
         <input
+        className={styles['username-input']}
           type="text"
           name="username"
           placeholder="Username"
@@ -33,11 +34,13 @@ const Signup = () => {
         ></input>
 
         <input
+        className={styles['username-input']}
           type="password"
           placeholder="Password"
           onChange={(event) => setPassword(event.target.value)}
         ></input>
         <button
+        className={styles['signup-button']}
           onClick={() => signup()}>
           Signup
         </button>

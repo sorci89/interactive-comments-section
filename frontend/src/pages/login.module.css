@@ -1,0 +1,26 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+.login-button {
+  flex-shrink: 0;
+  width: 95px;
+  height: 45px;
+  border-radius: 10px;
+  background-color: var(--moderate-blue);
+  text-transform: uppercase;
+  font-size: var(--base-font-size);
+  font-weight: var(--medium-font-weight);
+  color: var(--white);
+}
+
+.username-input,
+.password-input {
+  padding: 10px;
+  border: 1px solid var(--moderate-blue);
+  border-radius: 10px;
+  font-size: var(--base-font-size);
+}

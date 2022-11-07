@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import jwt from "jwt-decode"
+import styles from './login.module.css'
 
 const Login = ({setCurrentUser, setToken}) => {
     const [loginUsername, setLoginUsername] = useState("");
@@ -28,20 +29,21 @@ const Login = ({setCurrentUser, setToken}) => {
         }
 
     return (
-      <div>
-        <h1>Login</h1>
+      <div className={styles['login-container']}>
         <input
+        className={styles['username-input']}
           type="text"
           placeholder="Username"
           onChange={(event) => setLoginUsername(event.target.value)}
         />
         <input
+        className={styles['username-input']}
           type="password"
-          placeholder="password"
+          placeholder="Password"
           value={loginPassword}
           onChange={(event) => setLoginPassword(event.target.value)}
         />
-        <button onClick={() => login()} disabled={loginUsername.length === 0 || loginPassword.length === 0 }>Login</button>
+        <button className={styles['login-button']} onClick={() => login()} disabled={loginUsername.length === 0 || loginPassword.length === 0 }>Login</button>
       </div>
     )
   }

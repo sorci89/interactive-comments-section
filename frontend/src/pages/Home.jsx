@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import styles from './home.module.css'
 
 const Home = () => {
 
@@ -6,9 +7,9 @@ const Home = () => {
 
   
   return (
-    <div>
-      <button onClick={()=> navigate("/signup")}>Sign up</button>
-      <button onClick={()=> navigate("/login")}>Login</button>
+    <div className={styles['home-container']}>
+      <button className={styles['signup-button']} onClick={()=> navigate("/signup")}>Sign up</button>
+      <button className={styles['login-button']} onClick={()=> navigate("/login")}>Login</button>
     </div>
   )
 }
