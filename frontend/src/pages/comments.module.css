@@ -16,27 +16,42 @@
   background-color: var(--white);
 }
 
+li {
+  width: 100%;
+}
+
 .reply-editor,
 .new-comment-container {
   display: flex;
 }
 
-.open-editor-button button {
+.open-editor-button button,
+.open-editor-buttongroup button {
   font-size: var(--base-font-size);
   font-weight: var(--medium-font-weight);
   color: var(--moderate-blue);
 }
 
-.open-editor-button button:hover {
+.open-editor-button button:hover,
+.open-editor-buttongroup button:hover {
   color: var(--light-grayish-blue);
 }
 
-.open-editor-button button:disabled {
+.open-editor-button button:disabled,
+.open-editor-buttongroup button:disabled {
   color: var(--light-grayish-blue);
 }
 
-.open-editor-button {
+.open-editor-button,
+.open-editor-buttongroup,
+.update-editor-button {
   margin-left: auto;
+  align-self: center;
+}
+
+.open-editor-buttongroup {
+  display: flex;
+  gap: 15px;
 }
 
 .comment-card-top-section {
@@ -61,7 +76,8 @@
   height: auto;
 }
 
-.editor-button {
+.editor-button,
+.update-editor-button {
   margin-left: auto;
   flex-shrink: 0;
   width: 95px;
@@ -85,7 +101,8 @@
     grid-template-rows: auto auto auto;
   }
 
-  .open-editor-button {
+  .open-editor-button,
+  .open-editor-buttongroup {
     grid-column-start: 2;
     grid-row-start: 3;
   }
@@ -104,7 +121,13 @@
     grid-row-end: 1;
   }
 
-  .editor-button {
+  .update-editor-button {
+    grid-column-start: 2;
+    grid-row-start: 4;
+  }
+
+  .editor-button,
+  .update-editor-button {
     width: 75px;
     height: 35px;
     font-size: 14px;
@@ -115,7 +138,7 @@
   .comment-card {
     margin: 0 auto 15px;
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: max-content auto auto;
     grid-template-rows: auto auto auto;
   }
 
@@ -127,9 +150,15 @@
     margin: 0 auto 15px;
   }
 
-  .open-editor-button {
+  .open-editor-button,
+  .open-editor-buttongroup {
     grid-column-start: 3;
     grid-row-start: 1;
+  }
+
+  .update-editor-button {
+    grid-column-start: 3;
+    grid-row-start: 3;
   }
 
   .card-content-section {

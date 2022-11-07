@@ -8,6 +8,7 @@ import CreatedAt from "../components/CreatedAt";
 const Comments = ({token, currentUser}) => {
   const [comments, setComments] = useState([])
   const [newContent, setNewContent] = useState("")
+  const [newComment, setNewComment] = useState("")
   const [activeElement, setActiveElement] = useState()
   const [isOpen, setIsOpen] = useState("")
 
@@ -35,7 +36,7 @@ const Comments = ({token, currentUser}) => {
   const sendNewComment = async() => {
     try {
       const resp = await axios.post("http://localhost:4000/api/comments/addcomment", {
-        content: newContent,
+        content: newComment,
         score: '0',
       }, {
         headers: {
@@ -43,6 +44,7 @@ const Comments = ({token, currentUser}) => {
         }
       });
       console.log(resp)
+      setNewComment("")
       getComments()
     } catch(error) {
       console.log(error);
@@ -65,6 +67,9 @@ const Comments = ({token, currentUser}) => {
         }
       });
       console.log(resp)
+      setNewContent("")
+      setIsOpen("")
+      setActiveElement("")
       getComments()
     } catch(error) {
       console.log(error);
@@ -100,6 +105,7 @@ const Comments = ({token, currentUser}) => {
         }
       })
       console.log(resp)
+      setActiveElement()
       getComments()
     } catch(error) {
       console.log(error);
@@ -128,17 +134,19 @@ const Comments = ({token, currentUser}) => {
                 {comment.user._id === currentUser._id && <span>you</span>}
                 <CreatedAt creationDate={comment.createdAt} />
               </div>
-              {comment.user._id === currentUser._id ? <div className={styles["open-editor-button"]}><button onClick={()=> deleteElement(comment._id, "comment")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}>Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}>Reply</button></div>}
-              <div className={styles["card-content-section"]}>
+              {comment.user._id === currentUser._id ? <div className={styles["open-editor-buttongroup"]}><button onClick={()=> deleteElement(comment._id, "comment")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}>Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}>Reply</button></div>}
+              {activeElement === comment._id && isOpen === "editor" ? <div className={styles["card-content-section"]}><textarea className={styles["editor-text"]}  value={newContent} onChange={(event)=>setNewContent(event.target.value)} /></div> : <div className={styles["card-content-section"]}><section><a href="nolink"></a>{comment.content}</section></div>}
+              {activeElement === comment._id && isOpen === "editor" && <button className={styles['update-editor-button']} onClick={()=>updateComment(comment._id)}>Update</button>}
+            {/* <div className={styles["card-content-section"]}>
                 <section>{comment.content}</section>
-              </div>
+              </div> */}
           </div>
-          {activeElement === comment._id && <div className={styles["reply-editor"]}>
+          {activeElement === comment._id && isOpen === "reply" && <div className={styles["reply-editor"]}>
             <div className={styles['editor-profile-picture-container']}>
               <img className={styles['editor-profile-picture']} src={currentUser.png} alt="" />
             </div>
             <textarea className={styles["editor-text"]} type="text" value={newContent} onChange={(event)=>setNewContent(event.target.value)}></textarea>
-            {isOpen === "editor" && <button className={styles['editor-button']} onClick={()=>updateComment(comment._id)}>Update</button>} 
+            {/* {isOpen === "editor" && <button className={styles['editor-button']} onClick={()=>updateComment(comment._id)}>Update</button>}  */}
             {isOpen === "reply" && <button className={styles['editor-button']} onClick={()=>sendNewReply(comment._id, comment.user.username)}>Reply</button>}
           </div>}
           <Reply comment={comment} currentUser={currentUser} token={token} getComments={getComments} sendNewReply={sendNewReply} setIsOpen={setIsOpen} setActiveElement={setActiveElement} activeElement={activeElement} isOpen={isOpen} setNewContent={setNewContent} newContent={newContent} addReplyDetails={addReplyDetails} deleteElement={deleteElement} />
@@ -148,7 +156,7 @@ const Comments = ({token, currentUser}) => {
         <div className={styles['editor-profile-picture-container']}>
           <img className={styles['editor-profile-picture']} src={currentUser.png} alt="" />
         </div>
-        <textarea className={styles["editor-text"]} placeholder="Add a comment..." onChange={(event)=>setNewContent(event.target.value)}/>
+        <textarea className={styles["editor-text"]} placeholder="Add a comment..." onChange={(event)=>setNewComment(event.target.value)} value={newComment}/>
         <button className={styles['editor-button']} onClick={()=>sendNewComment()}>Send</button>
       </div>
     </div> : <div>Please Signup or login</div>}
