@@ -44,16 +44,20 @@ return (
               <CreatedAt creationDate={reply.createdAt}/>
             </div>
             {reply.user._id === currentUser._id ? <div className={styles["open-editor-button"]}><button onClick={()=> deleteElement(reply._id, "reply")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(reply._id); addReplyDetails(reply.replyingTo, reply.content)}} disabled={activeElement === reply._id} >Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(reply._id); addReplyDetails(reply.user.username)}} disabled={activeElement === reply._id}>Reply</button></div>}
-            <div className={styles["card-content-section"]}>
+            {/* <div className={styles["card-content-section"]}> */}
+            {activeElement === reply._id && isOpen === "editor" ? <div className={styles["card-content-section"]}><textarea className={styles["editor-text"]}  value={newContent} onChange={(event)=>setNewContent(event.target.value)} /></div> : <div className={styles["card-content-section"]}><section><a href="nolink">@{reply.replyingTo}</a>{reply.content}</section></div>}
+            {/* </div> */}
+            {activeElement === reply._id && isOpen === "editor" && <button className={styles['update-editor-button']} onClick={()=>updateReply(reply._id, reply.replyingTo)}>Update</button>}
+            {/* <div className={styles["card-content-section"]}>
               <section><a href="nolink">@{reply.replyingTo}</a>{reply.content}</section>
-            </div>
+            </div> */}
           </div>
-          {activeElement === reply._id && <div className={styles["reply-editor"]}>
+          {activeElement === reply._id && isOpen === "reply" && <div className={styles["reply-editor"]}>
             <div className={styles['editor-profile-picture-container']}>
               <img className={styles['editor-profile-picture']} src={currentUser.png} alt="" />
             </div> 
             <textarea className={styles["editor-text"]} value={newContent} onChange={(event)=>setNewContent(event.target.value)} />
-            {isOpen === "editor" && <button className={styles['editor-button']} onClick={()=>updateReply(reply._id, reply.replyingTo)}>Update</button>} 
+            {/* {isOpen === "editor" && <button className={styles['editor-button']} onClick={()=>updateReply(reply._id, reply.replyingTo)}>Update</button>}  */}
             {isOpen === "reply" && <button className={styles['editor-button']} onClick={()=>sendNewReply(comment._id, reply.user.username)}>Reply</button>}
           </div>}
         </li>

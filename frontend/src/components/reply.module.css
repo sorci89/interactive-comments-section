@@ -7,6 +7,10 @@
   max-width: 700px;
 }
 
+li {
+  width: 100%;
+}
+
 .card-wrapper:last-child {
   margin-bottom: 15px;
 }
@@ -37,7 +41,8 @@
   color: var(--light-grayish-blue);
 }
 
-.open-editor-button {
+.open-editor-button,
+.update-editor-button {
   margin-left: auto;
 }
 
@@ -63,7 +68,8 @@
   height: auto;
 }
 
-.editor-button {
+.editor-button,
+.update-editor-button {
   margin-left: auto;
   flex-shrink: 0;
   width: 95px;
@@ -119,7 +125,7 @@
 
   .reply-card {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto;
     grid-template-rows: auto auto auto;
   }
 
@@ -146,7 +152,13 @@
     grid-row-end: 1;
   }
 
-  .editor-button {
+  .update-editor-button {
+    grid-column-start: 2;
+    grid-row-start: 4;
+  }
+
+  .editor-button,
+  .update-editor-button {
     width: 75px;
     height: 35px;
     font-size: 14px;
@@ -164,7 +176,7 @@
 
   .reply-card {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: max-content auto auto;
     grid-template-rows: auto auto auto;
   }
 
@@ -175,6 +187,11 @@
   .open-editor-button {
     grid-column-start: 3;
     grid-row-start: 1;
+  }
+
+  .update-editor-button {
+    grid-column-start: 3;
+    grid-row-start: 3;
   }
 
   .card-content-section {

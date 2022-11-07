@@ -60,6 +60,11 @@
   color: var(--moderate-blue);
 }
 
+.score-btn-plus:disabled,
+.score-btn-minus:disabled {
+  color: var(--light-grayish-blue);
+}
+
 .score-number-container {
   display: flex;
   justify-content: center;
