@@ -2,6 +2,9 @@ import axios from "axios";
 import Score from "./Score";
 import CreatedAt from "./CreatedAt";
 import styles from "./reply.module.css";
+import {TiArrowBack} from 'react-icons/ti'
+import { MdDelete } from 'react-icons/md'
+import { MdModeEdit } from 'react-icons/md'
 
 const Reply = ({comment, currentUser, token, getComments, sendNewReply, setActiveElement, activeElement, setNewContent, newContent, addReplyDetails, isOpen, setIsOpen, deleteElement, sendScore}) => {
 
@@ -43,7 +46,7 @@ return (
               {reply.user._id === currentUser._id && <span className={styles["currentuser-sign"]}>you</span>}
               <CreatedAt creationDate={reply.createdAt}/>
             </div>
-            {reply.user._id === currentUser._id ? <div className={styles["open-editor-buttongroup"]}><button onClick={()=> deleteElement(reply._id, "reply")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(reply._id); addReplyDetails(reply.replyingTo, reply.content)}} disabled={activeElement === reply._id} >Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(reply._id); addReplyDetails(reply.user.username)}} disabled={activeElement === reply._id}>Reply</button></div>}
+            {reply.user._id === currentUser._id ? <div className={styles["open-editor-buttongroup"]}><button onClick={()=> deleteElement(reply._id, "reply")}><MdDelete/> Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(reply._id); addReplyDetails(reply.replyingTo, reply.content)}} disabled={activeElement === reply._id} ><MdModeEdit/> Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(reply._id); addReplyDetails(reply.user.username)}} disabled={activeElement === reply._id}><TiArrowBack/> Reply</button></div>}
             {activeElement === reply._id && isOpen === "editor" ? <div className={styles["card-content-section"]}><textarea className={styles["editor-text"]}  value={newContent} onChange={(event)=>setNewContent(event.target.value)} /></div> : <div className={styles["card-content-section"]}><section><a href="nolink">@{reply.replyingTo}</a>{reply.content}</section></div>}
             {activeElement === reply._id && isOpen === "editor" && <button className={styles['update-editor-button']} onClick={()=>updateReply(reply._id, reply.replyingTo)}>Update</button>}
           </div>

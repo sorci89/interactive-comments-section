@@ -90,12 +90,17 @@ li {
   color: var(--white);
 }
 
-.editor-button:hover {
+.editor-button:hover,
+.update-editor-button:hover {
   background-color: var(--light-grayish-blue);
 }
 
 .open-editor-buttongroup button:first-child {
   color: var(--soft-red);
+}
+
+.open-editor-buttongroup button:first-child:hover {
+  color: var(--pale-red);
 }
 
 @media screen and (max-width: 750px) {

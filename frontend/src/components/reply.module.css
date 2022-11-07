@@ -60,6 +60,10 @@ li {
   color: var(--soft-red);
 }
 
+.open-editor-buttongroup button:first-child:hover {
+  color: var(--pale-red);
+}
+
 .reply-card-top-section {
   display: flex;
   align-items: center;
@@ -96,7 +100,8 @@ li {
   color: var(--white);
 }
 
-.editor-button:hover {
+.editor-button:hover,
+.update-editor-button:hover {
   background-color: var(--light-grayish-blue);
 }
 

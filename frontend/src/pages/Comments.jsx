@@ -4,6 +4,9 @@ import styles from "./comments.module.css";
 import Reply from '../components/Reply'
 import Score from "../components/Score";
 import CreatedAt from "../components/CreatedAt";
+import {TiArrowBack} from 'react-icons/ti'
+import { MdDelete } from 'react-icons/md'
+import { MdModeEdit } from 'react-icons/md'
 
 const Comments = ({token, currentUser}) => {
   const [comments, setComments] = useState([])
@@ -134,7 +137,7 @@ const Comments = ({token, currentUser}) => {
                 {comment.user._id === currentUser._id && <span className={styles["currentuser-sign"]}>you</span>}
                 <CreatedAt creationDate={comment.createdAt} />
               </div>
-              {comment.user._id === currentUser._id ? <div className={styles["open-editor-buttongroup"]}><button onClick={()=> deleteElement(comment._id, "comment")}>Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}>Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}>Reply</button></div>}
+              {comment.user._id === currentUser._id ? <div className={styles["open-editor-buttongroup"]}><button onClick={()=> deleteElement(comment._id, "comment")}><MdDelete/> Delete</button><button onClick={() => {setIsOpen("editor"); setActiveElement(comment._id); setNewContent(comment.content)}}><MdModeEdit/> Edit</button></div> : <div className={styles["open-editor-button"]}><button onClick={()=> {setIsOpen("reply"); setActiveElement(comment._id); addReplyDetails(comment.user.username)}} disabled={activeElement === comment._id}><TiArrowBack/> Reply</button></div>}
               {activeElement === comment._id && isOpen === "editor" ? <div className={styles["card-content-section"]}><textarea className={styles["editor-text"]}  value={newContent} onChange={(event)=>setNewContent(event.target.value)} /></div> : <div className={styles["card-content-section"]}><section><a href="nolink"></a>{comment.content}</section></div>}
               {activeElement === comment._id && isOpen === "editor" && <button className={styles['update-editor-button']} onClick={()=>updateComment(comment._id)}>Update</button>}
           </div>
