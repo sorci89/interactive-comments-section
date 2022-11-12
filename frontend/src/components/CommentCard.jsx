@@ -1,4 +1,4 @@
-import styles from "../pages/comments.module.css";
+import styles from "./commentCard.module.css";
 import Score from "./Score";
 import CreatedAt from "./CreatedAt";
 import { TiArrowBack } from "react-icons/ti";
