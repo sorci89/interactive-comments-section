@@ -1,18 +1,33 @@
-import { useState} from "react"
+import { useRef } from "react"
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import styles from './signup.module.css'
+import styles from './signup.module.css';
+
+const API = {
+  token: ';',
+  request: () => {
+    axios.
+  }
+}
 
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("")
+  const usernameRef = useRef("");
+  const passwordRef = useRef("");
 
   const navigate = useNavigate()
 
-  const signup = async () => {
+  const signup = async (e) => {
+    e.preventDefault();
+
+    // const data = new FormData(e.target);
+    // console.log(data);
+    // let username = data.get(username);
+    // let password = data.get(password);
     try {
-      const resp = await axios.post("http://localhost:4000/api/users/signup", {
+      let username = usernameRef.current.value;
+      let password = passwordRef.current.value;
+      await axios.post("http://localhost:4000/api/users/signup", {
         username, password});
         navigate("/login")
     } catch (error) {
@@ -22,29 +37,27 @@ const Signup = () => {
   };
 
     return (
-      <div className={styles['signup-container']}>
+      <form className={styles['signup-container']} onSubmit={(e) => signup(e)}>
         <input
         className={styles['username-input']}
           type="text"
           name="username"
           placeholder="Username"
-          onChange={(event) => {
-            setUsername(event.target.value);
-          }}
-        ></input>
+          ref={usernameRef}
+        />
 
         <input
         className={styles['username-input']}
           type="password"
           placeholder="Password"
-          onChange={(event) => setPassword(event.target.value)}
-        ></input>
+          ref={passwordRef}
+        />
         <button
         className={styles['signup-button']}
-          onClick={() => signup()}>
+        >
           Signup
         </button>
-      </div>
+      </form>
     )
   }
   

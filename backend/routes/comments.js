@@ -13,7 +13,48 @@ router.get("/", auth({ block: true }), async (req, res) => {
   res.status(200).json(comments);
 });
 
+// GET comments
+//  no payload | list of comment
+// POST comments
+//  comment as a payload | comment
+// GET comments/{id}
+//  no payload | specific comment
+// PUT/PATCH comments/{id}
+// comment data as payload | comment
+// DELETE comments/{id}
+// no payload | 200 ok status
+
+router.post("/comment", auth({ block: true }), async (req, res) => {
+  const user = res.locals.user;
+  if (!user) return res.sendStatus(401);
+
+  const comment = await Comment.create({
+    content: req.body.content,
+    score: req.body.score,
+    user: user._id,
+  });
+  res.status(200).json({ comment });
+});
+
+router.put("/comment:id", auth({ block: true }), async (req, res) => {
+  const user = res.locals.user;
+  if (!user) return res.sendStatus(401);
+
+  const comment = await Comment.findById({ _id: req.body.id });
+
+  if (user._id == comment.user._id) return res.sendStatus(403);
+
+  await comment.updateOne({
+    score: req.body.score,
+    content: req.body.content,
+  });
+  return res.status(200).json("Comment score has been edited");
+});
+
+// old
+
 // ADD NEW COMMENT
+
 router.post("/addcomment", auth({ block: true }), async (req, res) => {
   const user = res.locals.user;
   if (!user) return res.sendStatus(401);
