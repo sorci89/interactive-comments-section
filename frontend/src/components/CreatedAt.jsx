@@ -1,17 +1,12 @@
-import React from 'react'
-import { formatDistanceToNow } from 'date-fns'
-
+import React from "react";
+import { formatDistanceToNow } from "date-fns";
 
 const CreatedAt = (creationDate) => {
-    const newDate = new Date(creationDate.creationDate)
- 
-    const result = formatDistanceToNow(
-        newDate
-    )
+  const newDate = new Date(creationDate.creationDate);
 
-  return (
-    <span>{result} ago</span>
-  )
-}
+  const result = formatDistanceToNow(newDate);
 
-export default CreatedAt
+  return <span>{result} ago</span>;
+};
+
+export default CreatedAt;
