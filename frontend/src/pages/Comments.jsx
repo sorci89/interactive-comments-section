@@ -34,7 +34,7 @@ const Comments = ({ token, currentUser }) => {
 
   const sendNewComment = async () => {
     try {
-      const resp = await post("/comments/comment", {
+      const resp = await post("/comments", {
         content: newComment,
         score: "0",
       });
@@ -81,17 +81,9 @@ const Comments = ({ token, currentUser }) => {
 
   const deleteElement = async (id, type) => {
     try {
-      const resp = await axios.put(
-        `http://localhost:4000/api/comments/delete${type}`,
-        {
-          id,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      const resp = await put(`/comments/delete${type}`, {
+        id,
+      });
       console.log(resp);
       getComments();
     } catch (error) {
@@ -102,8 +94,7 @@ const Comments = ({ token, currentUser }) => {
 
   const updateComment = async (commentId) => {
     try {
-      const resp = await put(`/comments/comment${commentId}`, {
-        commentId,
+      const resp = await put(`/comments/${commentId}`, {
         content: newContent,
       });
       console.log(resp);
