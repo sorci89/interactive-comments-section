@@ -3,12 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from './signup.module.css';
 
-const API = {
-  token: ';',
-  request: () => {
-    axios.
-  }
-}
+// const API = {
+//   token: ';',
+//   request: () => {
+//     axios.
+//   }
+// }
 
 
 const Signup = () => {
