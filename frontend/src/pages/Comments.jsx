@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import styles from "./comments.module.css";
 import CommentCard from "../components/CommentCard";
+import NewCommentEditor from "../components/NewCommentEditor";
 
 const Comments = ({ token, currentUser }) => {
   const [comments, setComments] = useState([]);
@@ -162,27 +163,12 @@ const Comments = ({ token, currentUser }) => {
               </li>
             ))}
           </ul>
-          <div className={styles["new-comment-container"]}>
-            <div className={styles["editor-profile-picture-container"]}>
-              <img
-                className={styles["editor-profile-picture"]}
-                src={currentUser.png}
-                alt=""
-              />
-            </div>
-            <textarea
-              className={styles["editor-text"]}
-              placeholder="Add a comment..."
-              onChange={(event) => setNewComment(event.target.value)}
-              value={newComment}
-            />
-            <button
-              className={styles["editor-button"]}
-              onClick={() => sendNewComment()}
-            >
-              Send
-            </button>
-          </div>
+          <NewCommentEditor
+            currentUser={currentUser}
+            setNewComment={setNewComment}
+            newComment={newComment}
+            sendNewComment={sendNewComment}
+          />
         </div>
       ) : (
         <div>Please Signup or login</div>
