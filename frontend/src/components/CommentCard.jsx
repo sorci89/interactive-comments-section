@@ -9,7 +9,6 @@ const CommentCard = ({
   comment,
   currentUser,
   getComments,
-  token,
   deleteElement,
   setIsOpen,
   setActiveElement,
@@ -27,7 +26,6 @@ const CommentCard = ({
         <Score
           element={comment}
           currentUser={currentUser}
-          token={token}
           getComments={getComments}
           type={"comment"}
         />

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { httpApi } from "../api/httpApi";
 import { useState, useEffect } from "react";
 import styles from "./comments.module.css";
 import CommentCard from "../components/CommentCard";
@@ -11,13 +12,11 @@ const Comments = ({ token, currentUser }) => {
   const [activeElement, setActiveElement] = useState();
   const [isOpen, setIsOpen] = useState("");
 
+  const { get } = httpApi();
+
   const getComments = async () => {
     try {
-      const resp = await axios.get("http://localhost:4000/api/comments", {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const resp = await get("/comments");
       setComments(resp.data);
     } catch (error) {
       console.log(error);
@@ -148,7 +147,6 @@ const Comments = ({ token, currentUser }) => {
                   comment={comment}
                   currentUser={currentUser}
                   getComments={getComments}
-                  token={token}
                   deleteElement={deleteElement}
                   setIsOpen={setIsOpen}
                   isOpen={isOpen}
