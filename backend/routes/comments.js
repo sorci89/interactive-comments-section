@@ -4,15 +4,6 @@ const Comment = require("../models/comments");
 const User = require("../models/user");
 const Reply = require("../models/reply");
 
-router.get("/", auth({ block: true }), async (req, res) => {
-  const comments = await Comment.find({})
-    .populate("user")
-    .populate({ path: "replies", populate: [{ path: "user" }] })
-    .populate("user");
-
-  res.status(200).json(comments);
-});
-
 // GET comments
 //  no payload | list of comment
 // POST comments
@@ -23,6 +14,15 @@ router.get("/", auth({ block: true }), async (req, res) => {
 // comment data as payload | comment
 // DELETE comments/{id}
 // no payload | 200 ok status
+
+router.get("/", auth({ block: true }), async (req, res) => {
+  const comments = await Comment.find({})
+    .populate("user")
+    .populate({ path: "replies", populate: [{ path: "user" }] })
+    .populate("user");
+
+  res.status(200).json(comments);
+});
 
 router.post("/comment", auth({ block: true }), async (req, res) => {
   const user = res.locals.user;
@@ -40,18 +40,18 @@ router.put("/comment:id", auth({ block: true }), async (req, res) => {
   const user = res.locals.user;
   if (!user) return res.sendStatus(401);
 
-  const comment = await Comment.findById({ _id: req.body.id });
+  const comment = await Comment.findById({ _id: req.params.id });
 
-  if (user._id == comment.user._id) return res.sendStatus(403);
+  if (user._id === comment.user._id) return res.sendStatus(403);
 
   await comment.updateOne({
     score: req.body.score,
     content: req.body.content,
   });
-  return res.status(200).json("Comment score has been edited");
+  return res.status(200).json({ comment });
 });
 
-// old
+//////// old
 
 // ADD NEW COMMENT
 

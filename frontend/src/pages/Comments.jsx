@@ -12,7 +12,7 @@ const Comments = ({ token, currentUser }) => {
   const [activeElement, setActiveElement] = useState();
   const [isOpen, setIsOpen] = useState("");
 
-  const { get } = httpApi();
+  const { get, post, put } = httpApi();
 
   const getComments = async () => {
     try {
@@ -34,18 +34,10 @@ const Comments = ({ token, currentUser }) => {
 
   const sendNewComment = async () => {
     try {
-      const resp = await axios.post(
-        "http://localhost:4000/api/comments/addcomment",
-        {
-          content: newComment,
-          score: "0",
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      const resp = await post("/comments/comment", {
+        content: newComment,
+        score: "0",
+      });
       console.log(resp);
       setNewComment("");
       getComments();
@@ -110,18 +102,10 @@ const Comments = ({ token, currentUser }) => {
 
   const updateComment = async (commentId) => {
     try {
-      const resp = await axios.put(
-        "http://localhost:4000/api/comments/editcommentcontent",
-        {
-          commentId,
-          content: newContent,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      const resp = await put(`/comments/comment${commentId}`, {
+        commentId,
+        content: newContent,
+      });
       console.log(resp);
       setActiveElement();
       getComments();
