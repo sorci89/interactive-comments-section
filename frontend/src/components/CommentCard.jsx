@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styles from "./commentCard.module.css";
 import Score from "./Score";
 import CreatedAt from "./CreatedAt";
@@ -12,14 +13,18 @@ const CommentCard = ({
   deleteElement,
   setIsOpen,
   setActiveElement,
-  setNewContent,
   addReplyDetails,
   activeElement,
   isOpen,
   updateComment,
-  newContent,
   sendNewReply,
+  sendScore,
 }) => {
+  const [content, setContent] = useState(comment.content);
+
+  const isActiveUser = comment.user._id === currentUser._id;
+  const isActiveCard = activeElement === comment._id;
+
   return (
     <>
       <div className={styles["comment-card"]}>
@@ -28,6 +33,8 @@ const CommentCard = ({
           currentUser={currentUser}
           getComments={getComments}
           type={"comment"}
+          disabled={isActiveUser}
+          sendScore={sendScore}
         />
         <div className={styles["comment-card-top-section"]}>
           <div className={styles["picture-container"]}>
@@ -45,16 +52,15 @@ const CommentCard = ({
           )}
           <CreatedAt creationDate={comment.createdAt} />
         </div>
-        {comment.user._id === currentUser._id ? (
+        {isActiveUser ? (
           <div className={styles["open-editor-buttongroup"]}>
             <button onClick={() => deleteElement(comment._id, "comment")}>
               <MdDelete /> Delete
             </button>
             <button
               onClick={() => {
-                setIsOpen("editor");
+                setIsOpen();
                 setActiveElement(comment._id);
-                setNewContent(comment.content);
               }}
             >
               <MdModeEdit /> Edit
@@ -64,28 +70,28 @@ const CommentCard = ({
           <div className={styles["open-editor-button"]}>
             <button
               onClick={() => {
-                setIsOpen("reply");
+                setIsOpen();
                 setActiveElement(comment._id);
                 addReplyDetails(comment.user.username);
               }}
-              disabled={activeElement === comment._id}
+              disabled={isActiveCard}
             >
               <TiArrowBack /> Reply
             </button>
           </div>
         )}
-        {activeElement === comment._id && isOpen === "editor" ? (
+        {isActiveCard && isActiveUser ? (
           <>
             <div className={styles["card-content-section"]}>
               <textarea
                 className={styles["editor-text"]}
-                value={newContent}
-                onChange={(event) => setNewContent(event.target.value)}
+                value={content}
+                onChange={(event) => setContent(event.target.value)}
               />
             </div>
             <button
               className={styles["update-editor-button"]}
-              onClick={() => updateComment(comment._id)}
+              onClick={() => updateComment({ ...comment, content })}
             >
               Update
             </button>
@@ -99,7 +105,7 @@ const CommentCard = ({
           </div>
         )}
       </div>
-      {activeElement === comment._id && isOpen === "reply" && (
+      {isActiveCard && !isActiveUser && (
         <div className={styles["reply-editor"]}>
           <div className={styles["editor-profile-picture-container"]}>
             <img
@@ -111,8 +117,8 @@ const CommentCard = ({
           <textarea
             className={styles["editor-text"]}
             type="text"
-            value={newContent}
-            onChange={(event) => setNewContent(event.target.value)}
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
           ></textarea>
           <button
             className={styles["editor-button"]}

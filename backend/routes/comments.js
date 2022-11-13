@@ -48,7 +48,9 @@ router.put("/:id", auth({ block: true }), async (req, res) => {
     score: req.body.score,
     content: req.body.content,
   });
-  return res.status(200).json({ comment });
+
+  let newComment = await Comment.findById({ _id: req.params.id });
+  return res.status(200).json({ comment: newComment });
 });
 
 //////// old

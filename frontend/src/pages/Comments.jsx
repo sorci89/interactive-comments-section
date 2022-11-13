@@ -7,30 +7,30 @@ import NewCommentEditor from "../components/NewCommentEditor";
 
 const Comments = ({ token, currentUser }) => {
   const [comments, setComments] = useState([]);
-  const [newContent, setNewContent] = useState("");
+
   const [newComment, setNewComment] = useState("");
   const [activeElement, setActiveElement] = useState();
-  const [isOpen, setIsOpen] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const { get, post, put } = httpApi();
 
   const getComments = async () => {
     try {
       const resp = await get("/comments");
-      setComments(resp.data);
+      setComments(resp);
     } catch (error) {
       console.log(error);
       return error.resp;
     }
   };
 
-  const addReplyDetails = (replyingTo, replyContent) => {
-    let replyDetails = replyContent
-      ? `@${replyingTo},${replyContent}`
-      : `@${replyingTo},`;
+  // const addReplyDetails = (replyingTo, replyContent) => {
+  //   let replyDetails = replyContent
+  //     ? `@${replyingTo},${replyContent}`
+  //     : `@${replyingTo},`;
 
-    setNewContent(replyDetails);
-  };
+  //   setNewContent(replyDetails);
+  // };
 
   const sendNewComment = async () => {
     try {
@@ -47,37 +47,37 @@ const Comments = ({ token, currentUser }) => {
     }
   };
 
-  const sendNewReply = async (commentId, replyingTo) => {
-    let replyContent =
-      newContent.search(`@${replyingTo},`) === 0
-        ? newContent.slice(replyingTo.length + 2)
-        : newContent;
+  // const sendNewReply = async (commentId, replyingTo) => {
+  //   let replyContent =
+  //     newContent.search(`@${replyingTo},`) === 0
+  //       ? newContent.slice(replyingTo.length + 2)
+  //       : newContent;
 
-    try {
-      const resp = await axios.post(
-        "http://localhost:4000/api/comments/addreply",
-        {
-          content: replyContent,
-          score: "0",
-          commentId,
-          replyingTo,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      console.log(resp);
-      setNewContent("");
-      setIsOpen("");
-      setActiveElement("");
-      getComments();
-    } catch (error) {
-      console.log(error);
-      return error.resp;
-    }
-  };
+  //   try {
+  //     const resp = await axios.post(
+  //       "http://localhost:4000/api/comments/addreply",
+  //       {
+  //         content: replyContent,
+  //         score: "0",
+  //         commentId,
+  //         replyingTo,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: token,
+  //         },
+  //       }
+  //     );
+  //     console.log(resp);
+  //     setNewContent("");
+  //     setIsOpen("");
+  //     setActiveElement("");
+  //     getComments();
+  //   } catch (error) {
+  //     console.log(error);
+  //     return error.resp;
+  //   }
+  // };
 
   const deleteElement = async (id, type) => {
     try {
@@ -92,14 +92,47 @@ const Comments = ({ token, currentUser }) => {
     }
   };
 
-  const updateComment = async (commentId) => {
+  const updateComment = async (newComment) => {
     try {
-      const resp = await put(`/comments/${commentId}`, {
-        content: newContent,
+      const resp = await put(`/comments/${newComment._id}`, {
+        content: newComment.content,
       });
       console.log(resp);
       setActiveElement();
-      getComments();
+      setComments(
+        comments.map((comment) => {
+          if (comment._id === newComment._id) {
+            return {
+              ...comment,
+              content: resp.comment.content,
+            };
+          }
+          return comment;
+        })
+      );
+    } catch (error) {
+      console.log(error);
+      return error.resp;
+    }
+  };
+
+  const sendScore = async (element, score) => {
+    try {
+      const resp = await put(`/comments/${element._id}`, {
+        score: Number(element.score) + Number(score),
+      });
+      console.log(resp);
+      setComments(
+        comments.map((comment) => {
+          if (comment._id === element._id) {
+            return {
+              ...comment,
+              score: resp.comment.score,
+            };
+          }
+          return comment;
+        })
+      );
     } catch (error) {
       console.log(error);
       return error.resp;
@@ -126,12 +159,11 @@ const Comments = ({ token, currentUser }) => {
                   setIsOpen={setIsOpen}
                   isOpen={isOpen}
                   setActiveElement={setActiveElement}
-                  setNewContent={setNewContent}
-                  addReplyDetails={addReplyDetails}
+                  // addReplyDetails={addReplyDetails}
                   activeElement={activeElement}
                   updateComment={updateComment}
-                  newContent={newContent}
-                  sendNewReply={sendNewReply}
+                  // sendNewReply={sendNewReply}
+                  sendScore={sendScore}
                 />
               </li>
             ))}

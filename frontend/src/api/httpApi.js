@@ -13,7 +13,7 @@ export const httpApi = () => {
           authorization: sessionStorage.getItem("token"),
         },
       });
-      return resp;
+      return resp.data;
     } catch (error) {
       console.log(error.response.status);
       console.log(error.response.data);
@@ -28,7 +28,7 @@ export const httpApi = () => {
           authorization: sessionStorage.getItem("token"),
         },
       });
-      return resp;
+      return resp.data;
     } catch (error) {
       console.log(error.response.status);
       console.log(error.response.data);
@@ -43,7 +43,7 @@ export const httpApi = () => {
           authorization: sessionStorage.getItem("token"),
         },
       });
-      return resp;
+      return resp.data;
     } catch (error) {
       console.log(error.response.status);
       console.log(error.response.data);
