@@ -93,9 +93,13 @@ const Comments = ({ token, currentUser }) => {
   };
 
   const updateComment = async (newComment) => {
+    console.log(newComment);
     try {
       const resp = await put(`/comments/${newComment._id}`, {
         content: newComment.content,
+        score: newComment.newScore
+          ? Number(newComment.score) + Number(newComment.newScore)
+          : newComment.score,
       });
       console.log(resp);
       setActiveElement();
@@ -105,28 +109,6 @@ const Comments = ({ token, currentUser }) => {
             return {
               ...comment,
               content: resp.comment.content,
-            };
-          }
-          return comment;
-        })
-      );
-    } catch (error) {
-      console.log(error);
-      return error.resp;
-    }
-  };
-
-  const sendScore = async (element, score) => {
-    try {
-      const resp = await put(`/comments/${element._id}`, {
-        score: Number(element.score) + Number(score),
-      });
-      console.log(resp);
-      setComments(
-        comments.map((comment) => {
-          if (comment._id === element._id) {
-            return {
-              ...comment,
               score: resp.comment.score,
             };
           }
@@ -154,16 +136,11 @@ const Comments = ({ token, currentUser }) => {
                 <CommentCard
                   comment={comment}
                   currentUser={currentUser}
-                  getComments={getComments}
                   deleteElement={deleteElement}
                   setIsOpen={setIsOpen}
-                  isOpen={isOpen}
                   setActiveElement={setActiveElement}
-                  // addReplyDetails={addReplyDetails}
                   activeElement={activeElement}
                   updateComment={updateComment}
-                  // sendNewReply={sendNewReply}
-                  sendScore={sendScore}
                 />
               </li>
             ))}

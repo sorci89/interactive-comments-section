@@ -9,16 +9,13 @@ import { MdModeEdit } from "react-icons/md";
 const CommentCard = ({
   comment,
   currentUser,
-  getComments,
   deleteElement,
   setIsOpen,
   setActiveElement,
   addReplyDetails,
   activeElement,
-  isOpen,
   updateComment,
   sendNewReply,
-  sendScore,
 }) => {
   const [content, setContent] = useState(comment.content);
 
@@ -29,12 +26,9 @@ const CommentCard = ({
     <>
       <div className={styles["comment-card"]}>
         <Score
-          element={comment}
-          currentUser={currentUser}
-          getComments={getComments}
-          type={"comment"}
+          comment={comment}
           disabled={isActiveUser}
-          sendScore={sendScore}
+          updateComment={updateComment}
         />
         <div className={styles["comment-card-top-section"]}>
           <div className={styles["picture-container"]}>
