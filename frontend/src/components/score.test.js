@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import Score from "./Score";
+import Score, { Button } from "./Score";
+
 
 const comment = [];
 const updateComment = (newComment) => {
@@ -150,4 +151,19 @@ test("it displays comment's score correctly", () => {
   const scoreDisplayElement = screen.getByText(comment.score);
 
   expect(scoreDisplayElement.textContent).toBe("15");
+});
+
+
+test("it fires a button click", () => {
+  const updateScore = (value) => {
+    return value;
+  }
+
+  const handleClick = jest.fn(updateScore);
+
+  render(<Button type="pancake" update={handleClick}>button</Button>);
+
+  fireEvent.click(screen.getByText("button"));
+  expect(handleClick).toHaveBeenCalledTimes(1);
+  expect(handleClick.mock.results[0].value).toEqual('pancake');
 });
