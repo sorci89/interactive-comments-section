@@ -12,7 +12,7 @@ const Comments = ({ token, currentUser }) => {
   const [activeElement, setActiveElement] = useState();
   const [isOpen, setIsOpen] = useState(false);
 
-  const { get, post, put } = httpApi();
+  const { get, post, put, remove } = httpApi();
 
   const getComments = async () => {
     try {
@@ -79,11 +79,10 @@ const Comments = ({ token, currentUser }) => {
   //   }
   // };
 
-  const deleteElement = async (id, type) => {
+  const deleteElement = async (id) => {
+    console.log(id);
     try {
-      const resp = await put(`/comments/delete${type}`, {
-        id,
-      });
+      const resp = await remove(`/comments/${id}`);
       console.log(resp);
       getComments();
     } catch (error) {
@@ -128,33 +127,29 @@ const Comments = ({ token, currentUser }) => {
 
   return (
     <>
-      {token ? (
-        <div className={styles["comments-container"]}>
-          <ul>
-            {comments.map((comment) => (
-              <li key={comment._id}>
-                <CommentCard
-                  comment={comment}
-                  currentUser={currentUser}
-                  deleteElement={deleteElement}
-                  setIsOpen={setIsOpen}
-                  setActiveElement={setActiveElement}
-                  activeElement={activeElement}
-                  updateComment={updateComment}
-                />
-              </li>
-            ))}
-          </ul>
-          <NewCommentEditor
-            currentUser={currentUser}
-            setNewComment={setNewComment}
-            newComment={newComment}
-            sendNewComment={sendNewComment}
-          />
-        </div>
-      ) : (
-        <div>Please Signup or login</div>
-      )}
+      <div className={styles["comments-container"]}>
+        <ul>
+          {comments.map((comment) => (
+            <li key={comment._id}>
+              <CommentCard
+                comment={comment}
+                currentUser={currentUser}
+                deleteElement={deleteElement}
+                setIsOpen={setIsOpen}
+                setActiveElement={setActiveElement}
+                activeElement={activeElement}
+                updateComment={updateComment}
+              />
+            </li>
+          ))}
+        </ul>
+        <NewCommentEditor
+          currentUser={currentUser}
+          setNewComment={setNewComment}
+          newComment={newComment}
+          sendNewComment={sendNewComment}
+        />
+      </div>
     </>
   );
 };

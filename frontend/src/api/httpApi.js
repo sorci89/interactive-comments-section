@@ -51,5 +51,20 @@ export const httpApi = () => {
     }
   };
 
-  return { get, post, put };
+  const remove = async (path) => {
+    try {
+      const resp = await instance.delete(path, {
+        headers: {
+          authorization: sessionStorage.getItem("token"),
+        },
+      });
+      return resp.data;
+    } catch (error) {
+      console.log(error.response.status);
+      console.log(error.response.data);
+      return error.response;
+    }
+  };
+
+  return { get, post, put, remove };
 };

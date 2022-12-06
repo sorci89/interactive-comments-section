@@ -36,6 +36,15 @@ router.post("/", auth({ block: true }), async (req, res) => {
   res.status(200).json({ comment });
 });
 
+router.delete("/:id", auth({ block: true }), async (req, res) => {
+  const id = req.params.id;
+  if (!id) return res.sendStatus(404);
+
+  await Comment.findByIdAndDelete(id);
+
+  res.status(200).json("Comment has been deleted");
+});
+
 router.put("/:id", auth({ block: true }), async (req, res) => {
   const user = res.locals.user;
   if (!user) return res.sendStatus(401);
@@ -98,15 +107,6 @@ router.put("/editcommentcontent", auth({ block: true }), async (req, res) => {
 });
 
 //DELETE COMMENT
-router.put("/deletecomment", auth({ block: true }), async (req, res) => {
-  console.log(req.body.id);
-  const id = req.body.id;
-  if (!id) return res.sendStatus(404);
-
-  await Comment.findByIdAndDelete(id);
-
-  res.status(200).json("Comment has been deleted");
-});
 
 //ADD NEW REPLY
 router.post("/addreply", auth({ block: true }), async (req, res) => {
