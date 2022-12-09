@@ -1,27 +1,13 @@
 import React from "react";
-import { useState, useRef, createRef } from "react";
+import { createRef } from "react";
 import styles from "./commentCard.module.css";
 import Score from "../Score/Score";
 import CreatedAt from "../CreatedAt/CreatedAt";
+import TextEditor from "../TextEditor/TextEditor";
+import Button from "../Button/Button";
 import { TiArrowBack } from "react-icons/ti";
 import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
-
-export const Editor = React.forwardRef((props, ref) => (
-  <textarea
-    className={styles["editor-text"]}
-    ref={ref}
-    defaultValue={props.defaultValue}
-  ></textarea>
-));
-
-export const Button = ({ children, onClick, type, ...rest }) => {
-  return (
-    <button onClick={onClick} {...rest}>
-      {children}
-    </button>
-  );
-};
 
 const CommentCard = ({
   comment,
@@ -97,7 +83,11 @@ const CommentCard = ({
         {isActiveCard && isActiveUser ? (
           <>
             <div className={styles["card-content-section"]}>
-              <Editor ref={editorRef} defaultValue={comment.content} />
+              <TextEditor
+                ref={editorRef}
+                defaultValue={comment.content}
+                className={styles["editor-text"]}
+              />
             </div>
             <Button
               onClick={handleUpdateAction}
@@ -124,7 +114,7 @@ const CommentCard = ({
               alt=""
             />
           </div>
-          <Editor ref={editorRef} />
+          <TextEditor ref={editorRef} className={styles["editor-text"]} />
           <Button
             onClick={handleReplyAction}
             className={styles["editor-button"]}
