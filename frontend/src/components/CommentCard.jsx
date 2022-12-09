@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React from "react";
+import { useState, useRef, createRef } from "react";
 import styles from "./commentCard.module.css";
 import Score from "./Score";
 import CreatedAt from "./CreatedAt";
@@ -6,16 +7,13 @@ import { TiArrowBack } from "react-icons/ti";
 import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 
-export const Editor = ({ value, setContent }) => {
-  return (
-    <textarea
-      className={styles["editor-text"]}
-      type="text"
-      value={value}
-      onChange={(event) => setContent(event.target.value)}
-    ></textarea>
-  );
-};
+export const Editor = React.forwardRef((props, ref) => (
+  <textarea
+    className={styles["editor-text"]}
+    ref={ref}
+    defaultValue={props.defaultValue}
+  ></textarea>
+));
 
 export const Button = ({ children, onClick, type, ...rest }) => {
   return (
@@ -36,15 +34,16 @@ const CommentCard = ({
   updateComment,
   sendNewReply,
 }) => {
-  const [content, setContent] = useState(comment.content);
-
   const isActiveUser = comment.user._id === currentUser._id;
   const isActiveCard = activeElement === comment._id;
+
+  const editorRef = createRef();
 
   const handleDeleteAction = () => {
     deleteElement(comment._id);
   };
   const handleUpdateAction = () => {
+    const content = editorRef.current.value;
     updateComment({ ...comment, content });
   };
   const handleReplyAction = () => {
@@ -93,22 +92,12 @@ const CommentCard = ({
             <Button onClick={handleEditorOpening} disabled={isActiveCard}>
               <TiArrowBack /> Reply
             </Button>
-            {/* <button
-              onClick={() => {
-                setIsOpen();
-                setActiveElement(comment._id);
-                addReplyDetails(comment.user.username);
-              }}
-              disabled={isActiveCard}
-            >
-              <TiArrowBack /> Reply
-            </button> */}
           </div>
         )}
         {isActiveCard && isActiveUser ? (
           <>
             <div className={styles["card-content-section"]}>
-              <Editor setContent={setContent} value={content} />
+              <Editor ref={editorRef} defaultValue={comment.content} />
             </div>
             <Button
               onClick={handleUpdateAction}
@@ -135,7 +124,7 @@ const CommentCard = ({
               alt=""
             />
           </div>
-          <Editor setContent={setContent} />
+          <Editor ref={editorRef} />
           <Button
             onClick={handleReplyAction}
             className={styles["editor-button"]}
