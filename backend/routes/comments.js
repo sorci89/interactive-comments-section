@@ -33,6 +33,8 @@ router.post("/", auth({ block: true }), async (req, res) => {
     score: req.body.score,
     user: user._id,
   });
+  await comment.populate("user");
+
   res.status(200).json({ comment });
 });
 

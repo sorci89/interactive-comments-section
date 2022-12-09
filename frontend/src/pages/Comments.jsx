@@ -37,8 +37,9 @@ const Comments = ({ token, currentUser }) => {
         content: content,
         score: "0",
       });
-      console.log(resp);
-      getComments();
+      console.log(resp.comment);
+
+      setComments([...comments, resp.comment]);
     } catch (error) {
       console.log(error);
       return error.resp;
