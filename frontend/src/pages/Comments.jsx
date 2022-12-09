@@ -2,13 +2,12 @@ import axios from "axios";
 import { httpApi } from "../api/httpApi";
 import { useState, useEffect } from "react";
 import styles from "./comments.module.css";
-import CommentCard from "../components/CommentCard";
+import CommentCard from "../components/CommentCard/CommentCard";
 import NewCommentEditor from "../components/NewCommentEditor";
 
 const Comments = ({ token, currentUser }) => {
   const [comments, setComments] = useState([]);
 
-  const [newComment, setNewComment] = useState("");
   const [activeElement, setActiveElement] = useState();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -32,14 +31,13 @@ const Comments = ({ token, currentUser }) => {
   //   setNewContent(replyDetails);
   // };
 
-  const sendNewComment = async () => {
+  const sendNewComment = async (content) => {
     try {
       const resp = await post("/comments", {
-        content: newComment,
+        content: content,
         score: "0",
       });
       console.log(resp);
-      setNewComment("");
       getComments();
     } catch (error) {
       console.log(error);
@@ -145,8 +143,6 @@ const Comments = ({ token, currentUser }) => {
         </ul>
         <NewCommentEditor
           currentUser={currentUser}
-          setNewComment={setNewComment}
-          newComment={newComment}
           sendNewComment={sendNewComment}
         />
       </div>

@@ -1,12 +1,17 @@
 import React from "react";
+import { createRef } from "react";
 import styles from "./newCommentEditor.module.css";
+import Editor from "./TextEditor/TextEditor";
+import Button from "./Button/Button";
 
-const NewCommentEditor = ({
-  currentUser,
-  newComment,
-  setNewComment,
-  sendNewComment,
-}) => {
+const NewCommentEditor = ({ currentUser, sendNewComment }) => {
+  const editorRef = createRef();
+
+  const handleNewComment = () => {
+    const content = editorRef.current.value;
+    sendNewComment(content);
+  };
+
   return (
     <>
       <div className={styles["new-comment-container"]}>
@@ -17,18 +22,14 @@ const NewCommentEditor = ({
             alt=""
           />
         </div>
-        <textarea
+        <Editor
           className={styles["editor-text"]}
+          ref={editorRef}
           placeholder="Add a comment..."
-          onChange={(event) => setNewComment(event.target.value)}
-          value={newComment}
         />
-        <button
-          className={styles["editor-button"]}
-          onClick={() => sendNewComment()}
-        >
+        <Button onClick={handleNewComment} className={styles["editor-button"]}>
           Send
-        </button>
+        </Button>
       </div>
     </>
   );

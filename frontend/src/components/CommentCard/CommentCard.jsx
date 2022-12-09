@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useRef, createRef } from "react";
 import styles from "./commentCard.module.css";
-import Score from "./Score";
-import CreatedAt from "./CreatedAt";
+import Score from "../Score/Score";
+import CreatedAt from "../CreatedAt/CreatedAt";
 import { TiArrowBack } from "react-icons/ti";
 import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
