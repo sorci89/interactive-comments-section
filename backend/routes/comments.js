@@ -55,12 +55,24 @@ router.put("/:id", auth({ block: true }), async (req, res) => {
 
   if (user._id === comment.user._id) return res.sendStatus(403);
 
+  console.log(req.body);
+
   await comment.updateOne({
     score: req.body.score,
     content: req.body.content,
+    $push: {
+      replies: {
+        content: req.body.replyContent,
+        score: req.body.replyScore,
+        user: user._id,
+      },
+    },
   });
 
-  let newComment = await Comment.findById({ _id: req.params.id });
+  let newComment = await Comment.findById({ _id: req.params.id })
+    .populate("user")
+    .populate({ path: "replies", populate: [{ path: "user" }] })
+    .populate("user");
   return res.status(200).json({ comment: newComment });
 });
 

@@ -15,6 +15,7 @@ const CommentCard = ({
   deleteElement,
   setIsOpen,
   setActiveElement,
+  sendNewComment,
   addReplyDetails,
   activeElement,
   updateComment,
@@ -30,10 +31,11 @@ const CommentCard = ({
   };
   const handleUpdateAction = () => {
     const content = editorRef.current.value;
-    updateComment({ ...comment, content });
+    updateComment(comment._id, { ...comment, content }, undefined);
   };
   const handleReplyAction = () => {
-    console.log("reply");
+    const content = editorRef.current.value;
+    updateComment(comment._id, undefined, content);
   };
   const handleEditorOpening = () => {
     setIsOpen();

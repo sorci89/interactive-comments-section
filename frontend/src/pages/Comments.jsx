@@ -1,4 +1,3 @@
-import axios from "axios";
 import { httpApi } from "../api/httpApi";
 import { useState, useEffect } from "react";
 import styles from "./comments.module.css";
@@ -31,14 +30,13 @@ const Comments = ({ token, currentUser }) => {
   //   setNewContent(replyDetails);
   // };
 
-  const sendNewComment = async (content) => {
+  const sendNewComment = async (content, commentId) => {
     try {
       const resp = await post("/comments", {
         content: content,
         score: "0",
+        commentId: commentId,
       });
-      console.log(resp.comment);
-
       setComments([...comments, resp.comment]);
     } catch (error) {
       console.log(error);
@@ -90,24 +88,29 @@ const Comments = ({ token, currentUser }) => {
     }
   };
 
-  const updateComment = async (newComment) => {
-    console.log(newComment);
+  const updateComment = async (id, newComment, newReply) => {
+    newComment && console.log(newComment);
     try {
-      const resp = await put(`/comments/${newComment._id}`, {
-        content: newComment.content,
-        score: newComment.newScore
-          ? Number(newComment.score) + Number(newComment.newScore)
-          : newComment.score,
+      const resp = await put(`/comments/${id}`, {
+        content: newComment && newComment.content,
+        score:
+          newComment &&
+          (newComment.newScore
+            ? Number(newComment.score) + Number(newComment.newScore)
+            : newComment.score),
+        replyContent: newReply,
+        replyScore: "0",
       });
       console.log(resp);
       setActiveElement();
       setComments(
         comments.map((comment) => {
-          if (comment._id === newComment._id) {
+          if (comment._id === id) {
             return {
               ...comment,
               content: resp.comment.content,
               score: resp.comment.score,
+              replies: resp.comment.replies,
             };
           }
           return comment;
@@ -138,7 +141,22 @@ const Comments = ({ token, currentUser }) => {
                 setActiveElement={setActiveElement}
                 activeElement={activeElement}
                 updateComment={updateComment}
+                sendNewComment={sendNewComment}
               />
+              {comment.replies.map((reply) => (
+                <div key={reply._id}>
+                  <CommentCard
+                    comment={reply}
+                    currentUser={currentUser}
+                    deleteElement={deleteElement}
+                    setIsOpen={setIsOpen}
+                    setActiveElement={setActiveElement}
+                    activeElement={activeElement}
+                    updateComment={updateComment}
+                    sendNewComment={sendNewComment}
+                  />
+                </div>
+              ))}
             </li>
           ))}
         </ul>

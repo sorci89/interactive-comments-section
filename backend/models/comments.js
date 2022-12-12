@@ -1,11 +1,20 @@
 const mongoose = require("mongoose");
 
+const replySchema = new mongoose.Schema(
+  {
+    content: { type: String },
+    score: { type: String },
+    user: { type: mongoose.SchemaTypes.ObjectId, ref: "User" },
+  },
+  { timestamps: true }
+);
+
 const commentSchema = new mongoose.Schema(
   {
     content: { type: String },
     score: { type: String },
     user: { type: mongoose.SchemaTypes.ObjectId, ref: "User" },
-    replies: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Reply" }],
+    replies: [replySchema],
   },
   { timestamps: true }
 );
