@@ -42,9 +42,24 @@ router.delete("/:id", auth({ block: true }), async (req, res) => {
   const id = req.params.id;
   if (!id) return res.sendStatus(404);
 
-  await Comment.findByIdAndDelete(id);
+  (await Comment.findByIdAndDelete(id)) ||
+    (await Comment.updateOne(
+      { "replies._id": id },
+      {
+        $pull: {
+          replies: {
+            _id: id,
+          },
+        },
+      }
+    ));
 
-  res.status(200).json("Comment has been deleted");
+  const comments = await Comment.find({})
+    .populate("user")
+    .populate({ path: "replies", populate: [{ path: "user" }] })
+    .populate("user");
+
+  res.status(200).json(comments);
 });
 
 router.put("/:id", auth({ block: true }), async (req, res) => {

@@ -81,7 +81,7 @@ const Comments = ({ token, currentUser }) => {
     try {
       const resp = await remove(`/comments/${id}`);
       console.log(resp);
-      getComments();
+      setComments(resp);
     } catch (error) {
       console.log(error);
       return error.resp;
@@ -89,6 +89,7 @@ const Comments = ({ token, currentUser }) => {
   };
 
   const updateComment = async (id, newComment, newReply) => {
+    console.log(newReply._id);
     newComment && console.log(newComment);
     try {
       const resp = await put(`/comments/${id}`, {
@@ -98,7 +99,7 @@ const Comments = ({ token, currentUser }) => {
           (newComment.newScore
             ? Number(newComment.score) + Number(newComment.newScore)
             : newComment.score),
-        replyContent: newReply,
+        replyContent: newReply.content,
         replyScore: "0",
       });
       console.log(resp);

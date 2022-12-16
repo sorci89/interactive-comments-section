@@ -35,7 +35,7 @@ const CommentCard = ({
   };
   const handleReplyAction = () => {
     const content = editorRef.current.value;
-    updateComment(comment._id, undefined, content);
+    updateComment(comment._id, undefined, { ...comment, content });
   };
   const handleEditorOpening = () => {
     setIsOpen();
